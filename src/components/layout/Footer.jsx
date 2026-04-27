@@ -27,10 +27,15 @@ const Footer = () => {
               <img src="/logo.png" alt="EZBZCART" className="h-10" />
             </Link>
 
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <a
+              href="https://wa.me/923297609190"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-gray-300 hover:text-green-400 transition-colors"
+            >
               <HiPhone size={16} />
               <span>0329 7609190</span>
-            </div>
+            </a>
 
             <div className="flex items-center gap-2 text-sm text-gray-300">
               <HiMail size={16} />
