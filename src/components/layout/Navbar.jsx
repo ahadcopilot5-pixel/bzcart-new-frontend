@@ -269,44 +269,49 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Nav Links Row - Pill (scrollable on small screens) */}
-          <div className="pb-3 overflow-x-auto scrollbar-hide">
-            <div className="flex items-center gap-3 border border-gray-200 rounded-full px-4 py-2 w-max mx-auto max-w-[calc(100vw-2rem)] overflow-x-auto scrollbar-hide">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className="text-xs text-gray-600 whitespace-nowrap"
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <div className="relative" ref={mobileDropdownRef}>
-                <button
-                  onClick={toggleCategoriesDropdown}
-                  className="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap"
-                >
-                  More Categories
-                  <IoChevronDown
-                    size={12}
-                    className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
-                    {MORE_CATEGORIES.map((category) => (
-                      <Link
-                        key={category.name}
-                        to={category.href}
-                        onClick={closeCategoriesDropdown}
-                        className="block px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 hover:text-orange-500 transition-colors"
-                      >
-                        {category.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+          {/* Mobile Nav Links */}
+          <div className="pb-3 px-4 flex items-center gap-2">
+            {/* Scrollable link chips — overflow-x-auto here but NO overflow clipping on dropdown */}
+            <div className="flex-1 overflow-x-auto scrollbar-hide">
+              <div className="flex items-center gap-2 w-max">
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className="text-xs text-gray-600 whitespace-nowrap px-3 py-1.5 rounded-full border border-gray-200 hover:border-orange-400 hover:text-orange-500 transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
               </div>
+            </div>
+
+            {/* More Categories — outside scroll container so dropdown is never clipped */}
+            <div className="relative flex-shrink-0" ref={mobileDropdownRef}>
+              <button
+                onClick={toggleCategoriesDropdown}
+                className="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap px-3 py-1.5 rounded-full border border-gray-200 hover:border-orange-400 hover:text-orange-500 transition-colors"
+              >
+                More
+                <IoChevronDown
+                  size={11}
+                  className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute top-full right-0 mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 z-50">
+                  {MORE_CATEGORIES.map((category) => (
+                    <Link
+                      key={category.name}
+                      to={category.href}
+                      onClick={closeCategoriesDropdown}
+                      className="block px-4 py-2.5 text-xs text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
