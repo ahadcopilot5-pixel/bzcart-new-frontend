@@ -269,9 +269,9 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Nav Links Row - Pill */}
-          <div className="px-4 py-3">
-            <div className="flex items-center justify-center gap-4 border border-gray-200 rounded-full px-4 py-2">
+          {/* Nav Links Row - Pill (scrollable on small screens) */}
+          <div className="pb-3 overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-3 border border-gray-200 rounded-full px-4 py-2 w-max mx-auto max-w-[calc(100vw-2rem)] overflow-x-auto scrollbar-hide">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.name}
