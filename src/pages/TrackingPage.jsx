@@ -112,8 +112,15 @@ const TrackingPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+        <div className="relative">
+          <div className="absolute inset-0 bg-orange-400/20 blur-2xl rounded-full scale-150 animate-pulse"></div>
+          <img src="/logo.png" alt="EZBZCART" className="h-12 relative z-10" />
+        </div>
+        <div className="mt-8 relative">
+          <div className="w-12 h-12 rounded-full border-[3px] border-gray-200"></div>
+          <div className="w-12 h-12 rounded-full border-[3px] border-transparent border-t-orange-500 border-r-orange-400 absolute top-0 left-0 animate-spin"></div>
+        </div>
       </div>
     );
   }
@@ -309,9 +316,6 @@ const TrackingPage = () => {
 
           {/* Action Buttons */}
           <div className="px-4 py-6 space-y-3">
-            <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-full text-sm font-medium transition-colors">
-              Contact Support
-            </button>
             <button
               onClick={() => handleDeleteOrder(orderData?._id)}
               disabled={deleting}
@@ -469,9 +473,6 @@ const TrackingPage = () => {
 
                 {/* Action Buttons */}
                 <div className="space-y-3 mt-6">
-                  <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-full text-sm font-medium transition-colors">
-                    Contact Support
-                  </button>
                   <button
                     onClick={() => handleDeleteOrder(orderData?._id)}
                     disabled={deleting}
