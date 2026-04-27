@@ -212,7 +212,7 @@ const ProductPage = () => {
       showToast.success("Added to cart!");
     } catch (err) {
       console.error("Add to cart error:", err);
-      showToast.error("Failed to add to cart");
+      showToast.error(err.message || "Failed to add to cart");
     } finally {
       setAddingToCart(false);
     }
