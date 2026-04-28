@@ -34,7 +34,7 @@ const Footer = () => {
               className="flex items-center gap-2 text-sm text-gray-300 hover:text-green-400 transition-colors"
             >
               <HiPhone size={16} />
-              <span>0329 7609190</span>
+              <span>+923297609190</span>
             </a>
 
             <div className="flex items-center gap-2 text-sm text-gray-300">

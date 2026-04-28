@@ -250,7 +250,7 @@ const CheckoutPage = () => {
         </div>
 
         {/* Success Content */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 pb-12 text-center">
           <div className="lg:bg-white lg:rounded-3xl lg:shadow-xl lg:p-16 lg:max-w-xl">
             {/* Success Illustration */}
             <div className="mb-8 relative">
