@@ -1,44 +1,29 @@
 import { useState, useEffect } from "react";
-
-const testimonials = [
-  {
-    id: 1,
-    name: "Leticia Kutch",
-    image: "https://i.pravatar.cc/150?img=44",
-    text: "Sapiente accusati exercitationem quasi eum corporis sit. Aut consectetur maxime debitis quam voluptatem aut consequatur voluptatum.",
-    rating: 5,
-    reviews: "8 rating",
-  },
-  {
-    id: 2,
-    name: "Marcus Johnson",
-    image: "https://i.pravatar.cc/150?img=32",
-    text: "Absolutely love the quality and style! The customer service was exceptional and delivery was super fast. Will definitely shop again.",
-    rating: 5,
-    reviews: "12 rating",
-  },
-  {
-    id: 3,
-    name: "Sarah Williams",
-    image: "https://i.pravatar.cc/150?img=68",
-    text: "Best online shopping experience I've ever had. The clothes fit perfectly and the materials are top-notch. Highly recommended!",
-    rating: 4,
-    reviews: "6 rating",
-  },
-  {
-    id: 4,
-    name: "David Chen",
-    image: "https://i.pravatar.cc/150?img=12",
-    text: "Great collection and amazing prices. The winter jacket I bought is incredibly warm and stylish. Five stars all the way!",
-    rating: 5,
-    reviews: "10 rating",
-  },
-];
+import { testimonialAPI } from "../../services/api";
 
 const ClientTestimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const data = await testimonialAPI.getAll();
+        setTestimonials(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+        setTestimonials([]);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  useEffect(() => {
+    if (testimonials.length <= 1) {
+      return undefined;
+    }
+
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
@@ -46,7 +31,17 @@ const ClientTestimonials = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [testimonials]);
+
+  useEffect(() => {
+    if (currentIndex > testimonials.length - 1) {
+      setCurrentIndex(0);
+    }
+  }, [currentIndex, testimonials.length]);
+
+  if (testimonials.length === 0) {
+    return null;
+  }
 
   const currentTestimonial = testimonials[currentIndex];
 
@@ -89,6 +84,12 @@ const ClientTestimonials = () => {
               {currentTestimonial.name}
             </h3>
 
+            {currentTestimonial.role && (
+              <p className="text-white/70 text-sm md:text-base mb-3">
+                {currentTestimonial.role}
+              </p>
+            )}
+
             {/* Testimonial Text */}
             <p className="text-white/90 text-sm md:text-base leading-relaxed mb-6 max-w-lg transition-all duration-500">
               {currentTestimonial.text}
@@ -96,10 +97,12 @@ const ClientTestimonials = () => {
 
             {/* Rating */}
             <div className="flex items-center gap-3 bg-white rounded-full px-4 py-2 shadow-md">
-              <span className="font-bold text-gray-800">5.0</span>
+              <span className="font-bold text-gray-800">
+                {Number(currentTestimonial.rating || 0).toFixed(1)}
+              </span>
               <span className="text-gray-500 text-sm">/</span>
               <span className="text-gray-500 text-sm">
-                {currentTestimonial.reviews}
+                {currentTestimonial.reviewsLabel || "Verified Review"}
               </span>
               <div className="flex">
                 {renderStars(currentTestimonial.rating)}

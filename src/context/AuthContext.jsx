@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const AuthContext = createContext(null);
 
@@ -15,17 +15,43 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user from localStorage on mount
-  useEffect(() => {
+  const syncAuthFromStorage = useCallback(() => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
 
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
+    } else {
+      setToken(null);
+      setUser(null);
     }
-    setLoading(false);
   }, []);
+
+  // Load user from localStorage on mount
+  useEffect(() => {
+    syncAuthFromStorage();
+    setLoading(false);
+  }, [syncAuthFromStorage]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      setToken(null);
+      setUser(null);
+    };
+
+    const handleStorageChange = () => {
+      syncAuthFromStorage();
+    };
+
+    window.addEventListener("auth:expired", handleAuthExpired);
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("auth:expired", handleAuthExpired);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [syncAuthFromStorage]);
 
   const login = (userData, authToken) => {
     setUser(userData);

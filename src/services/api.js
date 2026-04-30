@@ -1,6 +1,12 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "https://bzbackend.online/api";
 
+const clearInvalidAuth = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.dispatchEvent(new Event("auth:expired"));
+};
+
 // Helper function for API calls with automatic retry on network failures
 const apiCall = async (endpoint, options = {}, retries = 3, retryDelay = 800) => {
   const token = localStorage.getItem("token");
@@ -25,7 +31,18 @@ const apiCall = async (endpoint, options = {}, retries = 3, retryDelay = 800) =>
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
+        const message = data.message || "Something went wrong";
+
+        if (
+          response.status === 401 &&
+          /not authorized|token failed|jwt|unauthorized/i.test(message)
+        ) {
+          clearInvalidAuth();
+        }
+
+        const error = new Error(message);
+        error.status = response.status;
+        throw error;
       }
 
       return data;
@@ -220,6 +237,12 @@ export const reviewAPI = {
       method: "POST",
       body: JSON.stringify({ rating, comment }),
     });
+  },
+};
+
+export const testimonialAPI = {
+  getAll: async () => {
+    return apiCall("/testimonials", { method: "GET" });
   },
 };
 

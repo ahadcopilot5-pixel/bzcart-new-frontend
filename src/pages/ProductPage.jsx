@@ -4,6 +4,7 @@ import { productAPI, reviewAPI, wishlistAPI, cartAPI } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { showToast } from "../utils/helpers";
+import GlobalLoader from "../components/ui/GlobalLoader";
 import {
   HiOutlineHeart,
   HiHeart,
@@ -160,7 +161,8 @@ const ProductPage = () => {
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     if (!user) {
-      navigate("/login");
+      showToast.error("Please log in to submit a review");
+      navigate("/auth/login");
       return;
     }
     if (!newReview.comment.trim()) return;
@@ -173,7 +175,13 @@ const ProductPage = () => {
       showToast.success("Review submitted successfully!");
     } catch (err) {
       console.error("Error submitting review:", err);
-      showToast.error("Failed to submit review. Please try again.");
+
+      if (err.status === 401) {
+        showToast.error("Your session expired. Please log in again.");
+        navigate("/auth/login");
+      } else {
+        showToast.error("Failed to submit review. Please try again.");
+      }
     } finally {
       setSubmitLoading(false);
     }
@@ -197,7 +205,25 @@ const ProductPage = () => {
   // Add to cart
   const { refreshCart } = useCart();
 
+  const getCurrentAvailableStock = () => {
+    if (!product) return 0;
+    if (product.sizes?.length > 0) {
+      const selectedSizeObj = product.sizes.find(
+        (sizeObj) => sizeObj.size === selectedSize,
+      );
+      return selectedSizeObj?.stock || 0;
+    }
+    return product.product_stock || 0;
+  };
+
+  const isCurrentSelectionOutOfStock = () => getCurrentAvailableStock() <= 0;
+
   const handleAddToCart = async () => {
+    if (isCurrentSelectionOutOfStock()) {
+      showToast.error("This product is out of stock");
+      return;
+    }
+
     try {
       setAddingToCart(true);
       const selectedImage =
@@ -220,6 +246,11 @@ const ProductPage = () => {
 
   // Buy now
   const handleBuyNow = async () => {
+    if (isCurrentSelectionOutOfStock()) {
+      showToast.error("This product is out of stock");
+      return;
+    }
+
     await handleAddToCart();
     navigate("/checkout");
   };
@@ -264,18 +295,7 @@ const ProductPage = () => {
   const hasMoreReviews = reviews.length > paginatedReviews.length;
 
   if (loading) {
-    return (
-      <div className="bg-white min-h-screen flex flex-col items-center justify-center">
-        <div className="relative">
-          <div className="absolute inset-0 bg-orange-400/20 blur-2xl rounded-full scale-150 animate-pulse"></div>
-          <img src="/logo.png" alt="EZBZCART" className="h-12 relative z-10" />
-        </div>
-        <div className="mt-8 relative">
-          <div className="w-12 h-12 rounded-full border-[3px] border-gray-200"></div>
-          <div className="w-12 h-12 rounded-full border-[3px] border-transparent border-t-orange-500 border-r-orange-400 absolute top-0 left-0 animate-spin"></div>
-        </div>
-      </div>
-    );
+    return <GlobalLoader />;
   }
 
   if (error || !product) {
@@ -295,6 +315,13 @@ const ProductPage = () => {
       : ["/placeholder.png"];
   const hasColors = product.colors?.length > 0;
   const hasSizes = product.sizes?.length > 0;
+  const selectedSizeObj = hasSizes
+    ? product.sizes.find((sizeObj) => sizeObj.size === selectedSize)
+    : null;
+  const availableStock = hasSizes
+    ? selectedSizeObj?.stock || 0
+    : product.product_stock || 0;
+  const isOutOfStock = availableStock <= 0;
 
   // Calculate discount percentage
   const discountPercent =
@@ -457,16 +484,16 @@ const ProductPage = () => {
                 </span>
               )}
               <span className={`text-xs font-medium px-3 py-1 rounded-full ml-auto ${
-                product.product_stock > 10
+                availableStock > 10
                   ? "bg-green-50 text-green-600"
-                  : product.product_stock > 0
+                  : availableStock > 0
                   ? "bg-amber-50 text-amber-600"
                   : "bg-red-50 text-red-500"
               }`}>
-                {product.product_stock > 10
+                {availableStock > 10
                   ? "In Stock"
-                  : product.product_stock > 0
-                  ? `Only ${product.product_stock} left`
+                  : availableStock > 0
+                  ? `Only ${availableStock} left`
                   : "Out of Stock"}
               </span>
             </div>
@@ -586,20 +613,31 @@ const ProductPage = () => {
 
             {/* Action Buttons - Desktop only (mobile uses sticky bar) */}
             <div className="hidden lg:flex mt-6 gap-3">
-              <button
-                onClick={handleAddToCart}
-                disabled={addingToCart}
-                className="flex-1 border-2 border-gray-900 text-gray-900 py-3.5 rounded-xl text-sm font-semibold hover:bg-gray-900 hover:text-white transition-all disabled:opacity-50"
-              >
-                {addingToCart ? "Adding..." : "Add to Cart"}
-              </button>
-              <button
-                onClick={handleBuyNow}
-                disabled={addingToCart}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 shadow-lg shadow-orange-200"
-              >
-                {addingToCart ? "Processing..." : "Buy Now"}
-              </button>
+              {isOutOfStock ? (
+                <button
+                  disabled
+                  className="flex-1 bg-gray-500 text-white py-3.5 rounded-xl text-sm font-semibold cursor-not-allowed"
+                >
+                  Out of Stock
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={addingToCart}
+                    className="flex-1 border-2 border-gray-900 text-gray-900 py-3.5 rounded-xl text-sm font-semibold hover:bg-gray-900 hover:text-white transition-all disabled:opacity-50"
+                  >
+                    {addingToCart ? "Adding..." : "Add to Cart"}
+                  </button>
+                  <button
+                    onClick={handleBuyNow}
+                    disabled={addingToCart}
+                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 shadow-lg shadow-orange-200"
+                  >
+                    {addingToCart ? "Processing..." : "Buy Now"}
+                  </button>
+                </>
+              )}
               <a
                 href="https://wa.me/923297609190"
                 target="_blank"
@@ -798,14 +836,23 @@ const ProductPage = () => {
                           ))}
                         </div>
                         <div className="flex items-center gap-2 mb-3">
+                          {(() => {
+                            const reviewerName =
+                              review.user_id?.first_name ||
+                              review.user_id?.username ||
+                              "Customer";
+                            const reviewerInitial = reviewerName[0]?.toUpperCase() || "C";
+
+                            return (
+                              <>
                           <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
                             <span className="text-orange-500 font-semibold text-sm">
-                              {(review.user_id?.first_name?.[0] || "C").toUpperCase()}
+                              {reviewerInitial}
                             </span>
                           </div>
                           <div>
                             <p className="text-sm font-medium text-gray-900">
-                              {review.user_id?.first_name || "Customer"}
+                              {reviewerName}
                             </p>
                             <p className="text-xs text-gray-400">
                               {new Date(review.createdAt).toLocaleDateString("en-US", {
@@ -813,6 +860,9 @@ const ProductPage = () => {
                               })}
                             </p>
                           </div>
+                              </>
+                            );
+                          })()}
                           <span className="ml-auto text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                             Verified
                           </span>
@@ -848,20 +898,31 @@ const ProductPage = () => {
       {/* Sticky Mobile CTA Bar */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 py-3 safe-area-pb">
         <div className="flex gap-3">
-          <button
-            onClick={handleAddToCart}
-            disabled={addingToCart}
-            className="flex-1 border-2 border-gray-900 text-gray-900 py-3 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-all disabled:opacity-50"
-          >
-            {addingToCart ? "Adding..." : "Add to Cart"}
-          </button>
-          <button
-            onClick={handleBuyNow}
-            disabled={addingToCart}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 shadow-lg shadow-orange-200"
-          >
-            {addingToCart ? "Wait..." : "Buy Now"}
-          </button>
+          {isOutOfStock ? (
+            <button
+              disabled
+              className="flex-1 bg-gray-500 text-white py-3 rounded-xl text-sm font-semibold cursor-not-allowed"
+            >
+              Out of Stock
+            </button>
+          ) : (
+            <>
+              <button
+                onClick={handleAddToCart}
+                disabled={addingToCart}
+                className="flex-1 border-2 border-gray-900 text-gray-900 py-3 rounded-xl text-sm font-semibold hover:bg-gray-100 transition-all disabled:opacity-50"
+              >
+                {addingToCart ? "Adding..." : "Add to Cart"}
+              </button>
+              <button
+                onClick={handleBuyNow}
+                disabled={addingToCart}
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-semibold transition-all disabled:opacity-50 shadow-lg shadow-orange-200"
+              >
+                {addingToCart ? "Wait..." : "Buy Now"}
+              </button>
+            </>
+          )}
           <a
             href="https://wa.me/923297609190"
             target="_blank"
