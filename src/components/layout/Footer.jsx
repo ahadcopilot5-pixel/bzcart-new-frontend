@@ -17,6 +17,22 @@ const socialLinks = [
 ];
 
 const Footer = () => {
+  const handleEmailClick = (e) => {
+    e.preventDefault();
+
+    const email = "info@bzcart.store";
+    const mailtoUrl = `mailto:${email}`;
+    const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}`;
+
+    // First try the native mail app.
+    window.location.href = mailtoUrl;
+
+    // Fallback for in-app browsers that silently block mailto.
+    setTimeout(() => {
+      window.open(gmailComposeUrl, "_blank", "noopener,noreferrer");
+    }, 600);
+  };
+
   return (
     <footer className="bg-[#3d3d3d] text-white py-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -37,10 +53,14 @@ const Footer = () => {
               <span>+923297609190</span>
             </a>
 
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <a
+              href="mailto:info@bzcart.store"
+              onClick={handleEmailClick}
+              className="flex items-center gap-2 text-sm text-gray-300 hover:text-orange-400 transition-colors"
+            >
               <HiMail size={16} />
               <span>info@bzcart.store</span>
-            </div>
+            </a>
 
             <div className="flex items-start gap-2 text-sm text-gray-300">
               <HiLocationMarker size={16} className="mt-0.5 flex-shrink-0" />
