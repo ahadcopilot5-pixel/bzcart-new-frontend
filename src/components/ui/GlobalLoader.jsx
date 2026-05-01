@@ -7,7 +7,7 @@ const GlobalLoader = ({
   text = "Loading...",
 }) => {
   const containerClasses = fullScreen
-    ? "fixed inset-0 bg-gradient-to-br from-white via-orange-50/30 to-white z-[9999]"
+    ? "fixed inset-0 z-[9999] pointer-events-none"
     : "w-full h-full";
 
   return (
