@@ -53,11 +53,11 @@ const ClientTestimonials = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="py-16 px-4 bg-white">
+    <section className="py-8 px-4 bg-white">
       <div className="max-w-4xl mx-auto">
 
         {/* Badge */}
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-2">
           <span className="flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-500 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full">
             <svg className="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.171c.969 0 1.371 1.24.588 1.81l-3.374 2.452a1 1 0 00-.364 1.118l1.286 3.967c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.374 2.452c-.784.57-1.838-.197-1.539-1.118l1.286-3.967a1 1 0 00-.364-1.118L2.635 9.394c-.783-.57-.38-1.81.588-1.81h4.171a1 1 0 00.95-.69l1.286-3.967z" />
@@ -67,19 +67,19 @@ const ClientTestimonials = () => {
         </div>
 
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-3">
+        <h2 className="text-2xl md:text-3xl font-extrabold text-center text-gray-900 mb-2">
           What Our Clients Say <br />About <span className="text-orange-500">Us</span>
         </h2>
 
         {/* Subtitle */}
-        <p className="text-center text-gray-500 text-sm md:text-base mb-3 max-w-md mx-auto">
+        <p className="text-center text-gray-500 text-sm mb-2 max-w-md mx-auto">
           Real feedback from our happy customers who love shopping with{" "}
           <span className="font-bold text-gray-800">BZCart.</span>{" "}
           Your satisfaction is our top priority.
         </p>
 
         {/* Decorative line */}
-        <div className="flex justify-center gap-1 mb-10">
+        <div className="flex justify-center gap-1 mb-5">
           <span className="w-8 h-1 rounded-full bg-orange-500 inline-block" />
           <span className="w-2 h-1 rounded-full bg-orange-300 inline-block" />
         </div>
@@ -88,20 +88,20 @@ const ClientTestimonials = () => {
         <div className="bg-orange-500 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
 
           {/* Left — image with orange padding border */}
-          <div className="w-full md:w-1/2 p-4">
+          <div className="w-full md:w-1/2 p-3">
             <img
               src={currentTestimonial.image}
               alt={currentTestimonial.name}
               className="w-full h-full object-cover rounded-2xl"
-              style={{ minHeight: "320px" }}
+              style={{ minHeight: "240px", maxHeight: "360px" }}
             />
           </div>
 
           {/* Right — content */}
-          <div className="w-full md:w-1/2 flex flex-col justify-between p-7 md:p-8 gap-2">
+          <div className="w-full md:w-1/2 flex flex-col justify-between p-5 md:p-6 gap-2">
 
             {/* Location + Verified */}
-            <div className="bg-white rounded-2xl px-4 py-3 flex flex-col gap-1 shadow-sm">
+            <div className="bg-white rounded-2xl px-3 py-2 flex flex-col gap-0.5 shadow-sm">
               <div className="flex items-center gap-2 text-gray-800 font-bold text-sm md:text-base">
                 <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
@@ -117,7 +117,7 @@ const ClientTestimonials = () => {
             </div>
 
             {/* Rating */}
-            <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3 shadow-sm">
+            <div className="bg-white rounded-2xl px-3 py-2 flex items-center gap-3 shadow-sm">
               <span className="text-2xl font-extrabold text-gray-800">
                 {Number(currentTestimonial.rating || 0).toFixed(1)}
               </span>
@@ -133,7 +133,7 @@ const ClientTestimonials = () => {
             </div>
 
             {/* Quote + text */}
-            <div className="relative px-2 pt-2 pb-6">
+            <div className="relative px-2 pt-1 pb-4">
               <span className="text-white text-5xl font-bold leading-none select-none block mb-1">❝</span>
               <p className="text-white text-sm md:text-base leading-relaxed">
                 {currentTestimonial.text}
@@ -168,7 +168,7 @@ const ClientTestimonials = () => {
         </div>
 
         {/* Trust badges */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
           {trustBadges.map((badge) => (
             <div key={badge.title} className="flex items-center gap-3 border border-gray-100 rounded-2xl px-4 py-4 shadow-sm bg-white">
               <span className="text-2xl">{badge.icon}</span>
