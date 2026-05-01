@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaFacebook } from "react-icons/fa";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
@@ -166,8 +165,8 @@ const SignupForm = () => {
         </div>
 
         {/* Social Login */}
-        <div className="flex items-center justify-center gap-4">
-          <div className="flex-1 flex items-center justify-center">
+        <div className="flex items-center justify-center">
+          <div className="w-full flex items-center justify-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => showToast.error("Google signup failed")}
@@ -177,13 +176,6 @@ const SignupForm = () => {
               logo_alignment="center"
             />
           </div>
-          <button
-            type="button"
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-xs text-gray-600"
-          >
-            <FaFacebook size={16} className="text-blue-600" />
-            <span>Facebook</span>
-          </button>
         </div>
 
         {/* Switch to Login */}

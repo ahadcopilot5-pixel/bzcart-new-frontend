@@ -1,7 +1,5 @@
 import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
 import { authAPI } from "../../services/api";
@@ -10,7 +8,6 @@ import AuthCard from "./AuthCard";
 import InputField from "../ui/InputField";
 import Button from "../ui/Button";
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -132,8 +129,8 @@ const LoginForm = () => {
         </div>
 
         {/* Social Login */}
-        <div className="flex items-center justify-center gap-4">
-          <div className="flex-1 flex items-center justify-center">
+        <div className="flex items-center justify-center">
+          <div className="w-full flex items-center justify-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={() => showToast.error("Google login failed")}
@@ -143,13 +140,6 @@ const LoginForm = () => {
               logo_alignment="center"
             />
           </div>
-          <button
-            type="button"
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-xs text-gray-600"
-          >
-            <FaFacebook size={16} className="text-blue-600" />
-            <span>Facebook</span>
-          </button>
         </div>
 
         {/* Forgot Password */}
