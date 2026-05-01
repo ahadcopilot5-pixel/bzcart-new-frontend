@@ -266,6 +266,13 @@ export const orderAPI = {
     return apiCall(endpoint, { method: "GET" });
   },
 
+  track: async ({ orderId, email, phone }) => {
+    return apiCall("/orders/track", {
+      method: "POST",
+      body: JSON.stringify({ orderId, email, phone }),
+    });
+  },
+
   getById: async (id) => {
     return apiCall(`/orders/order/${id}`, { method: "GET" });
   },

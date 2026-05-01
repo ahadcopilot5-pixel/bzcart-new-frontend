@@ -332,6 +332,34 @@ const CheckoutPage = () => {
               explore our wide range of products. Happy Shopping!
             </p>
 
+            {orderId && (
+              <div className="mb-6 rounded-2xl border border-orange-100 bg-orange-50 px-5 py-4 text-left max-w-xs lg:max-w-sm mx-auto">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-orange-500">
+                  Order ID
+                </p>
+                <p className="mt-2 text-sm lg:text-base font-bold text-gray-900 break-all">
+                  {orderId}
+                </p>
+                <p className="mt-2 text-xs text-gray-500">
+                  Use this order ID with your email or phone number to track status updates anytime.
+                </p>
+              </div>
+            )}
+
+            <Link
+              to="/tracking"
+              state={{
+                trackingLookup: {
+                  orderId,
+                  email: shippingData.email,
+                  phone: shippingData.mobile,
+                },
+              }}
+              className="inline-block w-full max-w-xs lg:max-w-sm border border-orange-200 text-orange-500 py-3.5 lg:py-4 rounded-full text-sm lg:text-base font-medium hover:bg-orange-50 transition-colors text-center mb-4"
+            >
+              Track This Order
+            </Link>
+
             <Link
               to="/"
               className="inline-block w-full max-w-xs lg:max-w-sm bg-orange-500 text-white py-3.5 lg:py-4 rounded-full text-sm lg:text-base font-medium hover:bg-orange-600 transition-colors text-center shadow-lg hover:shadow-xl"
