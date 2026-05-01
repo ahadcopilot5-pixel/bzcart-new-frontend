@@ -60,72 +60,70 @@ const ClientTestimonials = () => {
 
   return (
     <section className="py-16 px-4 bg-white">
-      <div className="max-w-lg mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
-          What Our Clients Say
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+          What Our Clients Say About Us
         </h2>
 
-        {/* Card */}
-        <div className="rounded-3xl overflow-hidden shadow-2xl bg-white border border-gray-100">
+        {/* Testimonial Card */}
+        <div className="bg-orange-500 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+          {/* Main Content */}
+          <div className="flex flex-col items-center text-center px-8 md:px-16">
+            {/* Profile Image — square card style */}
+            <div className="relative mb-6 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-xl border-4 border-white">
+              <img
+                src={currentTestimonial.image}
+                alt={currentTestimonial.name}
+                className="w-full h-full object-cover transition-all duration-500"
+              />
+            </div>
 
-          {/* Full-width image on top */}
-          <div className="relative w-full" style={{ height: "320px" }}>
-            <img
-              src={currentTestimonial.image}
-              alt={currentTestimonial.name}
-              className="w-full h-full object-cover transition-all duration-500"
-            />
-            {/* Gradient fade into content below */}
-            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-orange-500 to-transparent" />
-          </div>
+            {/* Name */}
+            <h3 className="text-xl md:text-2xl font-semibold text-white mb-4">
+              {currentTestimonial.name}
+            </h3>
 
-          {/* Orange content panel */}
-          <div className="bg-orange-500 px-7 pt-4 pb-8">
+            {currentTestimonial.role && (
+              <p className="text-white/70 text-sm md:text-base mb-3">
+                {currentTestimonial.role}
+              </p>
+            )}
 
-            {/* Quote mark */}
-            <div className="text-white/20 text-6xl font-serif leading-none select-none -mt-2 mb-2">"</div>
-
-            {/* Testimonial text */}
-            <p className="text-white text-sm md:text-base leading-relaxed mb-5">
+            {/* Testimonial Text */}
+            <p className="text-white/90 text-sm md:text-base leading-relaxed mb-6 max-w-lg transition-all duration-500">
               {currentTestimonial.text}
             </p>
 
-            {/* Name & role */}
-            <div className="mb-5">
-              <h3 className="text-white font-bold text-xl">{currentTestimonial.name}</h3>
-              {currentTestimonial.role && (
-                <p className="text-white/70 text-sm">{currentTestimonial.role}</p>
-              )}
-            </div>
-
-            {/* Rating badge */}
-            <div className="flex items-center gap-3 bg-white rounded-2xl px-5 py-3 shadow-md w-fit mb-6">
-              <span className="font-bold text-gray-800 text-lg">
+            {/* Rating */}
+            <div className="flex items-center gap-3 bg-white rounded-full px-4 py-2 shadow-md">
+              <span className="font-bold text-gray-800">
                 {Number(currentTestimonial.rating || 0).toFixed(1)}
               </span>
-              <span className="text-gray-300 text-sm">/</span>
-              <span className="text-gray-500 text-sm font-medium">
+              <span className="text-gray-500 text-sm">/</span>
+              <span className="text-gray-500 text-sm">
                 {currentTestimonial.reviewsLabel || "Verified Review"}
               </span>
-              <div className="flex">{renderStars(currentTestimonial.rating)}</div>
+              <div className="flex">
+                {renderStars(currentTestimonial.rating)}
+              </div>
             </div>
+          </div>
 
-            {/* Slide indicators */}
-            <div className="flex gap-2">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? "bg-white w-6"
-                      : "bg-white/40 w-2 hover:bg-white/60"
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+          {/* Slide Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? "bg-white w-6"
+                    : "bg-white/50 hover:bg-white/70"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>
