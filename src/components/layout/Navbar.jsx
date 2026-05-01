@@ -5,6 +5,7 @@ import {
   HiOutlineUser,
   HiOutlineLogout,
   HiOutlinePhotograph,
+  HiOutlineLocationMarker,
 } from "react-icons/hi";
 import { IoChevronDown } from "react-icons/io5";
 import { useAuth } from "../../context/AuthContext";
@@ -73,6 +74,11 @@ const Navbar = () => {
     setIsProfileModalOpen(true);
   }, []);
 
+  const openTrackingPage = useCallback(() => {
+    setIsProfileDropdownOpen(false);
+    navigate("/tracking");
+  }, [navigate]);
+
   const toggleCategoriesDropdown = useCallback(
     () => setIsDropdownOpen((prev) => !prev),
     [],
@@ -123,6 +129,13 @@ const Navbar = () => {
       >
         <HiOutlinePhotograph size={isMobile ? 14 : 16} />
         {isMobile ? "Change Picture" : "Change Profile Picture"}
+      </button>
+      <button
+        onClick={openTrackingPage}
+        className={`w-full flex items-center gap-2 ${isMobile ? "px-3 py-2 text-xs" : "px-4 py-2 text-sm"} text-gray-700 hover:bg-gray-50 transition-colors`}
+      >
+        <HiOutlineLocationMarker size={isMobile ? 14 : 16} />
+        {isMobile ? "Track Order" : "Track Orders"}
       </button>
       <button
         onClick={handleLogout}
