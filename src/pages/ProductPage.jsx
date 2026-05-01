@@ -842,67 +842,151 @@ const ProductPage = () => {
                 </div>
 
                 {reviewsLoading ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {[...Array(6)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="bg-orange-50/60 border border-orange-100 rounded-2xl p-5 min-h-36 flex items-center justify-center"
-                      >
-                        <FaviconSpinner size={40} showGlow />
-                      </div>
-                    ))}
-                  </div>
+                  <>
+                    <div className="lg:hidden grid grid-cols-2 gap-3">
+                      {[...Array(4)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="bg-white border border-gray-200 rounded-[2px] p-3 min-h-32 flex items-center justify-center"
+                        >
+                          <FaviconSpinner size={28} showGlow />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {[...Array(6)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="bg-orange-50/60 border border-orange-100 rounded-2xl p-5 min-h-36 flex items-center justify-center"
+                        >
+                          <FaviconSpinner size={40} showGlow />
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 ) : paginatedReviews.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
-                    {paginatedReviews.map((review) => (
-                      <div key={review._id} className="bg-white border border-gray-200 rounded-md p-3 lg:p-5 hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-1 mb-3">
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i}>
-                              {i < review.rating ? (
-                                <HiStar className="w-4 h-4 text-yellow-400" />
-                              ) : (
-                                <HiOutlineStar className="w-4 h-4 text-gray-300" />
-                              )}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="flex items-center gap-2 mb-2">
-                          {(() => {
-                            const reviewerName =
-                              review.user_id?.first_name ||
-                              review.user_id?.username ||
-                              "Customer";
-                            const reviewerInitial = reviewerName[0]?.toUpperCase() || "C";
+                  <>
+                    <div className="lg:hidden">
+                      <h3 className="text-center text-[23px] font-semibold text-gray-900 mb-4">Customer Reviews</h3>
 
-                            return (
-                              <>
-                          <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                            <span className="text-orange-500 font-semibold text-sm">
-                              {reviewerInitial}
+                      <div className="flex items-center justify-center gap-4 mb-5">
+                        <div className="text-center">
+                          <div className="flex items-center justify-center gap-0.5">
+                            {[...Array(5)].map((_, i) => (
+                              <span key={i}>
+                                {i < Math.round(avgRating) ? (
+                                  <HiStar className="w-3.5 h-3.5 text-yellow-400" />
+                                ) : (
+                                  <HiOutlineStar className="w-3.5 h-3.5 text-gray-300" />
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-[11px] text-gray-600 mt-1">{avgRating} out of 5</p>
+                          <p className="text-[10px] text-gray-400 mt-0.5">Based on {reviews.length} reviews</p>
+                        </div>
+                        <div className="h-10 w-px bg-gray-300" />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        {paginatedReviews.map((review) => {
+                          const reviewerName =
+                            review.user_id?.first_name ||
+                            review.user_id?.username ||
+                            "Customer";
+
+                          return (
+                            <div key={review._id} className="bg-white border border-gray-300 rounded-[2px] p-2.5">
+                              <div className="flex items-center justify-between mb-1.5">
+                                <div className="flex items-center gap-0.5">
+                                  {[...Array(5)].map((_, i) => (
+                                    <span key={i}>
+                                      {i < review.rating ? (
+                                        <HiStar className="w-3 h-3 text-yellow-400" />
+                                      ) : (
+                                        <HiOutlineStar className="w-3 h-3 text-gray-300" />
+                                      )}
+                                    </span>
+                                  ))}
+                                </div>
+                                <span className="text-[9px] text-gray-400">
+                                  {new Date(review.createdAt).toLocaleDateString("en-GB")}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-1.5 mb-1.5">
+                                <span className="text-[10px] text-gray-500">◌</span>
+                                <span className="text-[10px] uppercase tracking-wide text-gray-500 truncate">
+                                  {reviewerName}
+                                </span>
+                                <span className="ml-auto text-[8px] bg-black text-white px-1.5 py-0.5 rounded-[2px] leading-none">
+                                  Verified
+                                </span>
+                              </div>
+
+                              <p className="text-[10px] text-gray-800 mb-1 leading-snug line-clamp-1">
+                                {product.product_name}
+                              </p>
+                              <p className="text-[10px] text-gray-600 leading-snug line-clamp-3">
+                                {review.comment}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {paginatedReviews.map((review) => (
+                        <div key={review._id} className="bg-white border border-gray-200 rounded-md p-5 hover:shadow-md transition-shadow">
+                          <div className="flex items-center gap-1 mb-3">
+                            {[...Array(5)].map((_, i) => (
+                              <span key={i}>
+                                {i < review.rating ? (
+                                  <HiStar className="w-4 h-4 text-yellow-400" />
+                                ) : (
+                                  <HiOutlineStar className="w-4 h-4 text-gray-300" />
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-2 mb-2">
+                            {(() => {
+                              const reviewerName =
+                                review.user_id?.first_name ||
+                                review.user_id?.username ||
+                                "Customer";
+                              const reviewerInitial = reviewerName[0]?.toUpperCase() || "C";
+
+                              return (
+                                <>
+                                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                    <span className="text-orange-500 font-semibold text-sm">
+                                      {reviewerInitial}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-medium text-gray-900">
+                                      {reviewerName}
+                                    </p>
+                                    <p className="text-xs text-gray-400">
+                                      {new Date(review.createdAt).toLocaleDateString("en-US", {
+                                        year: "numeric", month: "short", day: "numeric",
+                                      })}
+                                    </p>
+                                  </div>
+                                </>
+                              );
+                            })()}
+                            <span className="ml-auto text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                              Verified
                             </span>
                           </div>
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">
-                              {reviewerName}
-                            </p>
-                            <p className="text-xs text-gray-400">
-                              {new Date(review.createdAt).toLocaleDateString("en-US", {
-                                year: "numeric", month: "short", day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                              </>
-                            );
-                          })()}
-                          <span className="ml-auto text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                            Verified
-                          </span>
+                          <p className="text-sm text-gray-600 leading-relaxed line-clamp-4">{review.comment}</p>
                         </div>
-                        <p className="text-xs lg:text-sm text-gray-600 leading-relaxed line-clamp-4">{review.comment}</p>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </>
                 ) : (
                   <div className="text-center py-12">
                     <p className="text-gray-500">
@@ -915,7 +999,7 @@ const ProductPage = () => {
                   <div className="text-center mt-8">
                     <button
                       onClick={() => setReviewPage((prev) => prev + 1)}
-                      className="bg-black text-white px-6 py-2 rounded-full text-xs font-semibold hover:bg-gray-900 transition-colors"
+                      className="bg-black text-white px-6 py-2 rounded-full text-[11px] font-semibold hover:bg-gray-900 transition-colors"
                     >
                       Load more
                     </button>
