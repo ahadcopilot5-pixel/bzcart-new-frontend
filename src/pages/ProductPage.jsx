@@ -504,24 +504,6 @@ const ProductPage = () => {
               {product.product_name}
             </h1>
 
-            {/* Rating */}
-            <div className="flex items-center gap-2 mt-2">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i}>
-                    {i < Math.round(avgRating) ? (
-                      <HiStar className="w-4 h-4 text-yellow-400" />
-                    ) : (
-                      <HiOutlineStar className="w-4 h-4 text-gray-300" />
-                    )}
-                  </span>
-                ))}
-              </div>
-              <span className="text-xs text-gray-500">
-                {avgRating} · {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
-              </span>
-            </div>
-
             {/* Price */}
             <div className="mt-4 p-4 bg-gray-50 rounded-2xl">
               <div className="flex items-baseline gap-3 flex-wrap">
