@@ -6,6 +6,7 @@ import { IoLocationOutline } from "react-icons/io5";
 import { orderAPI } from "../services/api";
 import { showToast } from "../utils/helpers";
 import GlobalLoader from "../components/ui/GlobalLoader";
+import { Navbar } from "../components/layout";
 
 const formatPrice = (price) => {
   return `Rs.${Number(price).toLocaleString()} PKR`;
@@ -248,6 +249,8 @@ const TrackingPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
