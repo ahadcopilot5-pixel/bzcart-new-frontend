@@ -9,7 +9,6 @@ import FaviconSpinner from "../components/ui/FaviconSpinner";
 import {
   HiOutlineHeart,
   HiHeart,
-  HiMenu,
   HiOutlineShare,
   HiOutlineShieldCheck,
   HiOutlineTruck,
@@ -336,8 +335,7 @@ const ProductPage = () => {
       : 0;
 
   return (
-    <div className="bg-[#8d8d8d] lg:bg-white min-h-screen pb-0 lg:pb-0">
-      <div className="max-w-[430px] mx-auto bg-white min-h-screen lg:max-w-none lg:bg-transparent">
+    <div className="bg-white min-h-screen pb-24 lg:pb-0">
       {/* Breadcrumb - Desktop Only */}
       <div className="hidden lg:block border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-8 xl:px-12 py-4">
@@ -352,20 +350,19 @@ const ProductPage = () => {
       </div>
 
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between px-4 py-4 sticky top-0 bg-[#262626] z-20 border-b border-black/20">
-        <button className="w-8 h-8 flex items-center justify-center text-white/95">
-          <HiMenu className="w-5 h-5" />
-        </button>
-        <span className="text-white text-[17px] font-medium">E-commerce</span>
+      <div className="lg:hidden flex items-center justify-between px-4 py-3 sticky top-0 bg-white z-10 border-b border-gray-100">
+        <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100">
+          <HiChevronLeft className="w-5 h-5 text-gray-700" />
+        </Link>
+        <span className="text-sm font-medium text-gray-800 truncate max-w-[60%]">{product.product_name}</span>
         <button
           onClick={handleWishlist}
-          className="w-8 h-8 flex items-center justify-center text-white"
-          aria-label="Toggle wishlist"
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100"
         >
           {isWishlisted ? (
-            <HiHeart className="w-5 h-5 text-orange-500" />
+            <HiHeart className="w-5 h-5 text-red-500" />
           ) : (
-            <HiOutlineHeart className="w-5 h-5 text-white/90" />
+            <HiOutlineHeart className="w-5 h-5 text-gray-600" />
           )}
         </button>
       </div>
@@ -397,7 +394,7 @@ const ProductPage = () => {
 
             {/* Main Image */}
             <div className="relative flex-1">
-              <div className="relative aspect-square lg:aspect-[4/5] lg:max-h-[70vh] bg-[#d9d9d9] lg:bg-gray-50 lg:rounded-2xl overflow-hidden group">
+              <div className="relative aspect-square lg:aspect-[4/5] lg:max-h-[70vh] bg-gray-50 lg:rounded-2xl overflow-hidden group">
                 <img
                   src={images[currentImage]}
                   alt={product.product_name}
@@ -418,18 +415,18 @@ const ProductPage = () => {
                   </div>
                 )}
 
-                {/* Nav Arrows */}
+                {/* Nav Arrows — always visible on mobile, hover-only on desktop */}
                 {images.length > 1 && (
                   <>
                     <button
                       onClick={prevImage}
-                      className="hidden lg:flex absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <HiChevronLeft className="w-5 h-5 text-gray-700" />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <HiChevronRight className="w-5 h-5 text-gray-700" />
                     </button>
@@ -454,20 +451,22 @@ const ProductPage = () => {
                 </div>
               </div>
 
-              {/* Mobile Image Dots */}
+              {/* Mobile Thumbnail Strip */}
               {images.length > 1 && (
-                <div className="lg:hidden mt-2 pb-2 flex justify-center">
-                  <div className="flex items-center gap-1.5">
+                <div className="lg:hidden overflow-x-auto scrollbar-hide mt-3 px-4">
+                  <div className="flex gap-2 w-max pb-1">
                     {images.map((img, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentImage(index)}
-                        className={`transition-all rounded-full ${
+                        className={`w-14 h-14 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
                           index === currentImage
-                            ? "w-4 h-1.5 bg-black"
-                            : "w-1.5 h-1.5 bg-gray-400"
+                            ? "border-orange-500 shadow"
+                            : "border-gray-200 opacity-60"
                         }`}
-                      />
+                      >
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -476,10 +475,10 @@ const ProductPage = () => {
           </div>
 
           {/* Right: Product Details */}
-          <div className="-mt-3 lg:mt-0 lg:w-[52%] px-4 lg:px-0 bg-white rounded-t-[30px] relative z-10 pt-5 lg:pt-0 lg:rounded-none lg:bg-transparent lg:z-auto">
+          <div className="mt-5 lg:mt-0 lg:w-[52%] px-4 lg:px-0">
 
             {/* Brand + Stock Row */}
-            <div className="hidden lg:flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2">
               {product.brand_name && (
                 <span className="text-xs font-semibold text-orange-500 bg-orange-50 px-3 py-1 rounded-full uppercase tracking-wide">
                   {product.brand_name}
@@ -501,12 +500,12 @@ const ProductPage = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-[38px] sm:text-[42px] lg:text-2xl xl:text-3xl font-bold text-gray-900 leading-snug tracking-tight">
+            <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 leading-snug">
               {product.product_name}
             </h1>
 
             {/* Rating */}
-            <div className="hidden lg:flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-2">
               <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, i) => (
                   <span key={i}>
@@ -523,20 +522,10 @@ const ProductPage = () => {
               </span>
             </div>
 
-            {/* Mobile Rating + Sold */}
-            <div className="lg:hidden flex items-center gap-3 mt-3">
-              <span className="bg-orange-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full leading-none">
-                {Number(avgRating || 0).toFixed(1)} ★
-              </span>
-              <span className="text-xs text-gray-500 font-medium">
-                {reviews.length > 0 ? `${reviews.length} reviews` : "3.5k sold"}
-              </span>
-            </div>
-
             {/* Price */}
-            <div className="mt-2 lg:mt-4 p-0 lg:p-4 bg-transparent lg:bg-gray-50 rounded-none lg:rounded-2xl">
+            <div className="mt-4 p-4 bg-gray-50 rounded-2xl">
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-[32px] lg:text-3xl font-extrabold text-gray-900">
+                <span className="text-2xl lg:text-3xl font-bold text-gray-900">
                   {formatPrice(product.product_discounted_price)}
                 </span>
                 {discountPercent > 0 && (
@@ -550,7 +539,7 @@ const ProductPage = () => {
                   </>
                 )}
               </div>
-              <p className="hidden lg:block text-xs text-gray-400 mt-1">Inclusive of all taxes · Free Delivery</p>
+              <p className="text-xs text-gray-400 mt-1">Inclusive of all taxes · Free Delivery</p>
             </div>
 
             {/* Color Selection */}
@@ -566,7 +555,7 @@ const ProductPage = () => {
                       key={color.name}
                       onClick={() => setSelectedColor(color.name)}
                       title={color.name}
-                      className={`relative w-8 h-8 rounded-full transition-all ${
+                      className={`relative w-9 h-9 rounded-full transition-all ${
                         selectedColor === color.name
                           ? "ring-2 ring-offset-2 ring-orange-500 scale-110"
                           : "hover:scale-110"
@@ -608,9 +597,9 @@ const ProductPage = () => {
                       key={sizeObj.size}
                       onClick={() => setSelectedSize(sizeObj.size)}
                       disabled={sizeObj.stock === 0}
-                      className={`h-9 px-3 rounded-lg text-sm font-medium transition-all border ${
+                      className={`h-10 px-4 rounded-full text-sm font-medium transition-all border-2 ${
                         selectedSize === sizeObj.size
-                          ? "bg-orange-500 text-white border-orange-500"
+                          ? "bg-gray-900 text-white border-gray-900"
                           : sizeObj.stock === 0
                           ? "border-gray-200 text-gray-300 cursor-not-allowed line-through"
                           : "border-gray-200 text-gray-700 hover:border-gray-400"
@@ -622,25 +611,6 @@ const ProductPage = () => {
                 </div>
               </div>
             )}
-
-            {/* Action Buttons - Mobile */}
-            <div className="lg:hidden mt-6 flex items-center gap-3">
-              <button
-                onClick={handleAddToCart}
-                disabled={addingToCart || isOutOfStock}
-                className="flex-1 bg-orange-500 text-white py-3 rounded-xl text-sm font-semibold disabled:opacity-60"
-              >
-                {isOutOfStock ? "Out of Stock" : addingToCart ? "Adding..." : "Add to cart"}
-              </button>
-              <a
-                href="https://wa.me/923297609190"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center"
-              >
-                <FaWhatsapp className="w-5 h-5 text-white" />
-              </a>
-            </div>
 
             {/* Action Buttons - Desktop only (mobile uses sticky bar) */}
             <div className="hidden lg:flex mt-6 gap-3">
@@ -680,7 +650,7 @@ const ProductPage = () => {
             </div>
 
             {/* Trust Badges */}
-            <div className="hidden lg:grid mt-5 lg:mt-6 grid-cols-2 gap-3">
+            <div className="mt-5 lg:mt-6 grid grid-cols-2 gap-3">
               {[
                 { icon: HiOutlineTruck, label: "Free Delivery", sub: "All over Pakistan" },
                 { icon: HiOutlineCash, label: "Cash on Delivery", sub: "Pay when received" },
@@ -700,7 +670,7 @@ const ProductPage = () => {
             </div>
 
             {/* Payment Methods */}
-            <div className="hidden lg:flex mt-4 items-center gap-2 flex-wrap">
+            <div className="mt-4 flex items-center gap-2 flex-wrap">
               <span className="text-xs text-gray-400">Payment:</span>
               {[
                 { icon: HiOutlineCreditCard, label: "Card" },
@@ -719,17 +689,17 @@ const ProductPage = () => {
       {/* Tabs Section */}
       <div className="border-t border-gray-100 mt-8 lg:mt-16">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 xl:px-12">
-          <div className="flex gap-2 lg:gap-2 pt-4 lg:pt-8 border-b border-gray-200">
+          <div className="flex gap-1 lg:gap-2 pt-4 lg:pt-8 border-b border-gray-200">
             {[
-              { key: "overview", label: "Overview" },
-              { key: "reviews", label: "Reviews" },
+              { key: "overview", label: "Description" },
+              { key: "reviews", label: `Reviews (${reviews.length})` },
             ].map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`px-4 lg:px-10 py-2.5 lg:py-4 text-sm lg:text-base font-medium transition-all relative rounded-full mb-3 lg:mb-0 ${
+                className={`px-5 lg:px-10 py-3 lg:py-4 text-sm lg:text-base font-medium transition-all relative ${
                   activeTab === key
-                    ? "text-white bg-orange-500 lg:text-orange-500 lg:bg-transparent"
+                    ? "text-orange-500"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -779,7 +749,7 @@ const ProductPage = () => {
               <div>
                 <div className="lg:flex lg:gap-12 lg:items-start mb-8 lg:mb-10">
                   {/* Rating summary */}
-                  <div className="flex items-center justify-center gap-4 lg:flex-col lg:items-start mb-6 lg:mb-0 lg:w-48 border border-gray-200 rounded-xl p-4 lg:p-0 lg:border-0 lg:rounded-none">
+                  <div className="flex items-center gap-4 lg:flex-col lg:items-start mb-6 lg:mb-0 lg:w-48">
                     <div>
                       <div className="text-4xl lg:text-5xl font-bold text-gray-900">{avgRating}</div>
                       <div className="flex items-center gap-0.5 mt-1">
@@ -794,7 +764,7 @@ const ProductPage = () => {
                         ))}
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500">Based on {reviews.length} reviews</p>
+                    <p className="text-sm text-gray-400">{reviews.length} reviews</p>
                   </div>
 
                   {user && (
@@ -842,151 +812,65 @@ const ProductPage = () => {
                 </div>
 
                 {reviewsLoading ? (
-                  <>
-                    <div className="lg:hidden grid grid-cols-2 gap-3">
-                      {[...Array(4)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="bg-white border border-gray-200 rounded-[2px] p-3 min-h-32 flex items-center justify-center"
-                        >
-                          <FaviconSpinner size={28} showGlow />
-                        </div>
-                      ))}
-                    </div>
-                    <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {[...Array(6)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="bg-orange-50/60 border border-orange-100 rounded-2xl p-5 min-h-36 flex items-center justify-center"
-                        >
-                          <FaviconSpinner size={40} showGlow />
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : paginatedReviews.length > 0 ? (
-                  <>
-                    <div className="lg:hidden">
-                      <h3 className="text-center text-[23px] font-semibold text-gray-900 mb-4">Customer Reviews</h3>
-
-                      <div className="flex items-center justify-center gap-4 mb-5">
-                        <div className="text-center">
-                          <div className="flex items-center justify-center gap-0.5">
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i}>
-                                {i < Math.round(avgRating) ? (
-                                  <HiStar className="w-3.5 h-3.5 text-yellow-400" />
-                                ) : (
-                                  <HiOutlineStar className="w-3.5 h-3.5 text-gray-300" />
-                                )}
-                              </span>
-                            ))}
-                          </div>
-                          <p className="text-[11px] text-gray-600 mt-1">{avgRating} out of 5</p>
-                          <p className="text-[10px] text-gray-400 mt-0.5">Based on {reviews.length} reviews</p>
-                        </div>
-                        <div className="h-10 w-px bg-gray-300" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="bg-orange-50/60 border border-orange-100 rounded-2xl p-5 min-h-36 flex items-center justify-center"
+                      >
+                        <FaviconSpinner size={40} showGlow />
                       </div>
-
-                      <div className="grid grid-cols-2 gap-3">
-                        {paginatedReviews.map((review) => {
-                          const reviewerName =
-                            review.user_id?.first_name ||
-                            review.user_id?.username ||
-                            "Customer";
-
-                          return (
-                            <div key={review._id} className="bg-white border border-gray-300 rounded-[2px] p-2.5">
-                              <div className="flex items-center justify-between mb-1.5">
-                                <div className="flex items-center gap-0.5">
-                                  {[...Array(5)].map((_, i) => (
-                                    <span key={i}>
-                                      {i < review.rating ? (
-                                        <HiStar className="w-3 h-3 text-yellow-400" />
-                                      ) : (
-                                        <HiOutlineStar className="w-3 h-3 text-gray-300" />
-                                      )}
-                                    </span>
-                                  ))}
+                    ))}
+                  </div>
+                ) : paginatedReviews.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {paginatedReviews.map((review) => (
+                      <div key={review._id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                        {/* Top row: avatar + name + date + verified */}
+                        <div className="flex items-center gap-3 mb-3">
+                          {(() => {
+                            const reviewerName =
+                              review.user_id?.first_name ||
+                              review.user_id?.username ||
+                              "Customer";
+                            const reviewerInitial = reviewerName[0]?.toUpperCase() || "C";
+                            return (
+                              <>
+                                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                  <span className="text-orange-500 font-bold text-sm">{reviewerInitial}</span>
                                 </div>
-                                <span className="text-[9px] text-gray-400">
-                                  {new Date(review.createdAt).toLocaleDateString("en-GB")}
-                                </span>
-                              </div>
-
-                              <div className="flex items-center gap-1.5 mb-1.5">
-                                <span className="text-[10px] text-gray-500">◌</span>
-                                <span className="text-[10px] uppercase tracking-wide text-gray-500 truncate">
-                                  {reviewerName}
-                                </span>
-                                <span className="ml-auto text-[8px] bg-black text-white px-1.5 py-0.5 rounded-[2px] leading-none">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-semibold text-gray-900 truncate">{reviewerName}</p>
+                                  <p className="text-xs text-gray-400">
+                                    {new Date(review.createdAt).toLocaleDateString("en-US", {
+                                      year: "numeric", month: "short", day: "numeric",
+                                    })}
+                                  </p>
+                                </div>
+                                <span className="flex-shrink-0 text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
                                   Verified
                                 </span>
-                              </div>
-
-                              <p className="text-[10px] text-gray-800 mb-1 leading-snug line-clamp-1">
-                                {product.product_name}
-                              </p>
-                              <p className="text-[10px] text-gray-600 leading-snug line-clamp-3">
-                                {review.comment}
-                              </p>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {paginatedReviews.map((review) => (
-                        <div key={review._id} className="bg-white border border-gray-200 rounded-md p-5 hover:shadow-md transition-shadow">
-                          <div className="flex items-center gap-1 mb-3">
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i}>
-                                {i < review.rating ? (
-                                  <HiStar className="w-4 h-4 text-yellow-400" />
-                                ) : (
-                                  <HiOutlineStar className="w-4 h-4 text-gray-300" />
-                                )}
-                              </span>
-                            ))}
-                          </div>
-                          <div className="flex items-center gap-2 mb-2">
-                            {(() => {
-                              const reviewerName =
-                                review.user_id?.first_name ||
-                                review.user_id?.username ||
-                                "Customer";
-                              const reviewerInitial = reviewerName[0]?.toUpperCase() || "C";
-
-                              return (
-                                <>
-                                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                    <span className="text-orange-500 font-semibold text-sm">
-                                      {reviewerInitial}
-                                    </span>
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-medium text-gray-900">
-                                      {reviewerName}
-                                    </p>
-                                    <p className="text-xs text-gray-400">
-                                      {new Date(review.createdAt).toLocaleDateString("en-US", {
-                                        year: "numeric", month: "short", day: "numeric",
-                                      })}
-                                    </p>
-                                  </div>
-                                </>
-                              );
-                            })()}
-                            <span className="ml-auto text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                              Verified
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-600 leading-relaxed line-clamp-4">{review.comment}</p>
+                              </>
+                            );
+                          })()}
                         </div>
-                      ))}
-                    </div>
-                  </>
+                        {/* Stars */}
+                        <div className="flex items-center gap-0.5 mb-3">
+                          {[...Array(5)].map((_, i) => (
+                            <span key={i}>
+                              {i < review.rating ? (
+                                <HiStar className="w-4 h-4 text-yellow-400" />
+                              ) : (
+                                <HiOutlineStar className="w-4 h-4 text-gray-300" />
+                              )}
+                            </span>
+                          ))}
+                        </div>
+                        {/* Comment */}
+                        <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                   <div className="text-center py-12">
                     <p className="text-gray-500">
@@ -999,9 +883,9 @@ const ProductPage = () => {
                   <div className="text-center mt-8">
                     <button
                       onClick={() => setReviewPage((prev) => prev + 1)}
-                      className="bg-black text-white px-6 py-2 rounded-full text-[11px] font-semibold hover:bg-gray-900 transition-colors"
+                      className="border-2 border-gray-900 text-gray-900 px-10 py-3 rounded-xl text-sm font-semibold hover:bg-gray-900 hover:text-white transition-colors"
                     >
-                      Load more
+                      Load More Reviews
                     </button>
                   </div>
                 )}
@@ -1012,7 +896,7 @@ const ProductPage = () => {
       </div>
 
       {/* Sticky Mobile CTA Bar */}
-      <div className="hidden lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 py-3 safe-area-pb">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 py-3 safe-area-pb">
         <div className="flex gap-3">
           {isOutOfStock ? (
             <button
@@ -1048,7 +932,6 @@ const ProductPage = () => {
             <FaWhatsapp className="w-5 h-5 text-white" />
           </a>
         </div>
-      </div>
       </div>
     </div>
   );
