@@ -133,21 +133,21 @@ const ClientTestimonials = () => {
             </div>
 
             {/* Quote + text */}
-            <div className="relative">
-              <span className="text-white/30 text-6xl font-serif leading-none select-none absolute -top-3 -left-1">"</span>
-              <p className="text-white text-sm md:text-base leading-relaxed pl-6 pr-6 pt-4">
+            <div className="relative px-2 pt-2 pb-6">
+              <span className="text-white text-5xl font-bold leading-none select-none block mb-1">❝</span>
+              <p className="text-white text-sm md:text-base leading-relaxed">
                 {currentTestimonial.text}
               </p>
-              <span className="text-white/30 text-6xl font-serif leading-none select-none absolute -bottom-6 right-0">"</span>
+              <span className="text-white text-5xl font-bold leading-none select-none absolute bottom-0 right-2">❞</span>
             </div>
 
             {/* Trusted badge */}
-            <div className="bg-white/15 border border-white/30 rounded-2xl px-4 py-3 flex items-center gap-3 mt-2">
-              <svg className="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3">
+              <svg className="w-5 h-5 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
-              <span className="text-white text-sm font-medium">
-                Trusted by <span className="font-bold text-white">5000+</span> Happy Customers
+              <span className="text-gray-800 text-sm font-medium">
+                Trusted by <span className="font-bold text-orange-500">5000+</span> Happy Customers
               </span>
             </div>
 
