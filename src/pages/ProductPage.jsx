@@ -9,6 +9,7 @@ import FaviconSpinner from "../components/ui/FaviconSpinner";
 import {
   HiOutlineHeart,
   HiHeart,
+  HiMenu,
   HiOutlineShare,
   HiOutlineShieldCheck,
   HiOutlineTruck,
@@ -335,7 +336,8 @@ const ProductPage = () => {
       : 0;
 
   return (
-    <div className="bg-white min-h-screen pb-24 lg:pb-0">
+    <div className="bg-[#8d8d8d] lg:bg-white min-h-screen pb-0 lg:pb-0">
+      <div className="max-w-[430px] mx-auto bg-white min-h-screen lg:max-w-none lg:bg-transparent">
       {/* Breadcrumb - Desktop Only */}
       <div className="hidden lg:block border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-8 xl:px-12 py-4">
@@ -350,19 +352,20 @@ const ProductPage = () => {
       </div>
 
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between px-4 py-3 sticky top-0 bg-white z-10 border-b border-gray-100">
-        <Link to="/" className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100">
-          <HiChevronLeft className="w-5 h-5 text-gray-700" />
-        </Link>
-        <span className="text-sm font-medium text-gray-800 truncate max-w-[60%]">{product.product_name}</span>
+      <div className="lg:hidden flex items-center justify-between px-4 py-4 sticky top-0 bg-[#262626] z-20 border-b border-black/20">
+        <button className="w-8 h-8 flex items-center justify-center text-white/95">
+          <HiMenu className="w-5 h-5" />
+        </button>
+        <span className="text-white text-[17px] font-medium">E-commerce</span>
         <button
           onClick={handleWishlist}
-          className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100"
+          className="w-8 h-8 flex items-center justify-center text-white"
+          aria-label="Toggle wishlist"
         >
           {isWishlisted ? (
-            <HiHeart className="w-5 h-5 text-red-500" />
+            <HiHeart className="w-5 h-5 text-orange-500" />
           ) : (
-            <HiOutlineHeart className="w-5 h-5 text-gray-600" />
+            <HiOutlineHeart className="w-5 h-5 text-white/90" />
           )}
         </button>
       </div>
@@ -394,7 +397,7 @@ const ProductPage = () => {
 
             {/* Main Image */}
             <div className="relative flex-1">
-              <div className="relative aspect-square lg:aspect-[4/5] lg:max-h-[70vh] bg-gray-50 lg:rounded-2xl overflow-hidden group">
+              <div className="relative aspect-square lg:aspect-[4/5] lg:max-h-[70vh] bg-[#d9d9d9] lg:bg-gray-50 lg:rounded-2xl overflow-hidden group">
                 <img
                   src={images[currentImage]}
                   alt={product.product_name}
@@ -415,18 +418,18 @@ const ProductPage = () => {
                   </div>
                 )}
 
-                {/* Nav Arrows — always visible on mobile, hover-only on desktop */}
+                {/* Nav Arrows */}
                 {images.length > 1 && (
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
+                      className="hidden lg:flex absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <HiChevronLeft className="w-5 h-5 text-gray-700" />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
+                      className="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 lg:w-10 lg:h-10 bg-white/90 backdrop-blur rounded-full items-center justify-center shadow-lg transition-all lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <HiChevronRight className="w-5 h-5 text-gray-700" />
                     </button>
@@ -451,22 +454,20 @@ const ProductPage = () => {
                 </div>
               </div>
 
-              {/* Mobile Thumbnail Strip */}
+              {/* Mobile Image Dots */}
               {images.length > 1 && (
-                <div className="lg:hidden overflow-x-auto scrollbar-hide mt-3 px-4">
-                  <div className="flex gap-2 w-max pb-1">
+                <div className="lg:hidden mt-2 pb-2 flex justify-center">
+                  <div className="flex items-center gap-1.5">
                     {images.map((img, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentImage(index)}
-                        className={`w-14 h-14 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                        className={`transition-all rounded-full ${
                           index === currentImage
-                            ? "border-orange-500 shadow"
-                            : "border-gray-200 opacity-60"
+                            ? "w-4 h-1.5 bg-black"
+                            : "w-1.5 h-1.5 bg-gray-400"
                         }`}
-                      >
-                        <img src={img} alt="" className="w-full h-full object-cover" />
-                      </button>
+                      />
                     ))}
                   </div>
                 </div>
@@ -475,10 +476,10 @@ const ProductPage = () => {
           </div>
 
           {/* Right: Product Details */}
-          <div className="mt-5 lg:mt-0 lg:w-[52%] px-4 lg:px-0">
+          <div className="-mt-3 lg:mt-0 lg:w-[52%] px-4 lg:px-0 bg-white rounded-t-[30px] relative z-10 pt-5 lg:pt-0 lg:rounded-none lg:bg-transparent lg:z-auto">
 
             {/* Brand + Stock Row */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="hidden lg:flex items-center justify-between mb-2">
               {product.brand_name && (
                 <span className="text-xs font-semibold text-orange-500 bg-orange-50 px-3 py-1 rounded-full uppercase tracking-wide">
                   {product.brand_name}
@@ -500,12 +501,12 @@ const ProductPage = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900 leading-snug">
+            <h1 className="text-[38px] sm:text-[42px] lg:text-2xl xl:text-3xl font-bold text-gray-900 leading-snug tracking-tight">
               {product.product_name}
             </h1>
 
             {/* Rating */}
-            <div className="flex items-center gap-2 mt-2">
+            <div className="hidden lg:flex items-center gap-2 mt-2">
               <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, i) => (
                   <span key={i}>
@@ -522,10 +523,20 @@ const ProductPage = () => {
               </span>
             </div>
 
+            {/* Mobile Rating + Sold */}
+            <div className="lg:hidden flex items-center gap-3 mt-3">
+              <span className="bg-orange-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full leading-none">
+                {Number(avgRating || 0).toFixed(1)} ★
+              </span>
+              <span className="text-xs text-gray-500 font-medium">
+                {reviews.length > 0 ? `${reviews.length} reviews` : "3.5k sold"}
+              </span>
+            </div>
+
             {/* Price */}
-            <div className="mt-4 p-4 bg-gray-50 rounded-2xl">
+            <div className="mt-2 lg:mt-4 p-0 lg:p-4 bg-transparent lg:bg-gray-50 rounded-none lg:rounded-2xl">
               <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-2xl lg:text-3xl font-bold text-gray-900">
+                <span className="text-[32px] lg:text-3xl font-extrabold text-gray-900">
                   {formatPrice(product.product_discounted_price)}
                 </span>
                 {discountPercent > 0 && (
@@ -539,7 +550,7 @@ const ProductPage = () => {
                   </>
                 )}
               </div>
-              <p className="text-xs text-gray-400 mt-1">Inclusive of all taxes · Free Delivery</p>
+              <p className="hidden lg:block text-xs text-gray-400 mt-1">Inclusive of all taxes · Free Delivery</p>
             </div>
 
             {/* Color Selection */}
@@ -555,7 +566,7 @@ const ProductPage = () => {
                       key={color.name}
                       onClick={() => setSelectedColor(color.name)}
                       title={color.name}
-                      className={`relative w-9 h-9 rounded-full transition-all ${
+                      className={`relative w-8 h-8 rounded-full transition-all ${
                         selectedColor === color.name
                           ? "ring-2 ring-offset-2 ring-orange-500 scale-110"
                           : "hover:scale-110"
@@ -597,9 +608,9 @@ const ProductPage = () => {
                       key={sizeObj.size}
                       onClick={() => setSelectedSize(sizeObj.size)}
                       disabled={sizeObj.stock === 0}
-                      className={`h-10 px-4 rounded-full text-sm font-medium transition-all border-2 ${
+                      className={`h-9 px-3 rounded-lg text-sm font-medium transition-all border ${
                         selectedSize === sizeObj.size
-                          ? "bg-gray-900 text-white border-gray-900"
+                          ? "bg-orange-500 text-white border-orange-500"
                           : sizeObj.stock === 0
                           ? "border-gray-200 text-gray-300 cursor-not-allowed line-through"
                           : "border-gray-200 text-gray-700 hover:border-gray-400"
@@ -611,6 +622,25 @@ const ProductPage = () => {
                 </div>
               </div>
             )}
+
+            {/* Action Buttons - Mobile */}
+            <div className="lg:hidden mt-6 flex items-center gap-3">
+              <button
+                onClick={handleAddToCart}
+                disabled={addingToCart || isOutOfStock}
+                className="flex-1 bg-orange-500 text-white py-3 rounded-xl text-sm font-semibold disabled:opacity-60"
+              >
+                {isOutOfStock ? "Out of Stock" : addingToCart ? "Adding..." : "Add to cart"}
+              </button>
+              <a
+                href="https://wa.me/923297609190"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center"
+              >
+                <FaWhatsapp className="w-5 h-5 text-white" />
+              </a>
+            </div>
 
             {/* Action Buttons - Desktop only (mobile uses sticky bar) */}
             <div className="hidden lg:flex mt-6 gap-3">
@@ -650,7 +680,7 @@ const ProductPage = () => {
             </div>
 
             {/* Trust Badges */}
-            <div className="mt-5 lg:mt-6 grid grid-cols-2 gap-3">
+            <div className="hidden lg:grid mt-5 lg:mt-6 grid-cols-2 gap-3">
               {[
                 { icon: HiOutlineTruck, label: "Free Delivery", sub: "All over Pakistan" },
                 { icon: HiOutlineCash, label: "Cash on Delivery", sub: "Pay when received" },
@@ -670,7 +700,7 @@ const ProductPage = () => {
             </div>
 
             {/* Payment Methods */}
-            <div className="mt-4 flex items-center gap-2 flex-wrap">
+            <div className="hidden lg:flex mt-4 items-center gap-2 flex-wrap">
               <span className="text-xs text-gray-400">Payment:</span>
               {[
                 { icon: HiOutlineCreditCard, label: "Card" },
@@ -689,17 +719,17 @@ const ProductPage = () => {
       {/* Tabs Section */}
       <div className="border-t border-gray-100 mt-8 lg:mt-16">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 xl:px-12">
-          <div className="flex gap-1 lg:gap-2 pt-4 lg:pt-8 border-b border-gray-200">
+          <div className="flex gap-2 lg:gap-2 pt-4 lg:pt-8 border-b border-gray-200">
             {[
-              { key: "overview", label: "Description" },
-              { key: "reviews", label: `Reviews (${reviews.length})` },
+              { key: "overview", label: "Overview" },
+              { key: "reviews", label: "Reviews" },
             ].map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
-                className={`px-5 lg:px-10 py-3 lg:py-4 text-sm lg:text-base font-medium transition-all relative ${
+                className={`px-4 lg:px-10 py-2.5 lg:py-4 text-sm lg:text-base font-medium transition-all relative rounded-full mb-3 lg:mb-0 ${
                   activeTab === key
-                    ? "text-orange-500"
+                    ? "text-white bg-orange-500 lg:text-orange-500 lg:bg-transparent"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -749,7 +779,7 @@ const ProductPage = () => {
               <div>
                 <div className="lg:flex lg:gap-12 lg:items-start mb-8 lg:mb-10">
                   {/* Rating summary */}
-                  <div className="flex items-center gap-4 lg:flex-col lg:items-start mb-6 lg:mb-0 lg:w-48">
+                  <div className="flex items-center justify-center gap-4 lg:flex-col lg:items-start mb-6 lg:mb-0 lg:w-48 border border-gray-200 rounded-xl p-4 lg:p-0 lg:border-0 lg:rounded-none">
                     <div>
                       <div className="text-4xl lg:text-5xl font-bold text-gray-900">{avgRating}</div>
                       <div className="flex items-center gap-0.5 mt-1">
@@ -764,7 +794,7 @@ const ProductPage = () => {
                         ))}
                       </div>
                     </div>
-                    <p className="text-sm text-gray-400">{reviews.length} reviews</p>
+                    <p className="text-xs text-gray-500">Based on {reviews.length} reviews</p>
                   </div>
 
                   {user && (
@@ -823,9 +853,9 @@ const ProductPage = () => {
                     ))}
                   </div>
                 ) : paginatedReviews.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
                     {paginatedReviews.map((review) => (
-                      <div key={review._id} className="bg-gray-50 rounded-2xl p-5 hover:shadow-md transition-shadow">
+                      <div key={review._id} className="bg-white border border-gray-200 rounded-md p-3 lg:p-5 hover:shadow-md transition-shadow">
                         <div className="flex items-center gap-1 mb-3">
                           {[...Array(5)].map((_, i) => (
                             <span key={i}>
@@ -837,7 +867,7 @@ const ProductPage = () => {
                             </span>
                           ))}
                         </div>
-                        <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center gap-2 mb-2">
                           {(() => {
                             const reviewerName =
                               review.user_id?.first_name ||
@@ -869,7 +899,7 @@ const ProductPage = () => {
                             Verified
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 leading-relaxed">{review.comment}</p>
+                        <p className="text-xs lg:text-sm text-gray-600 leading-relaxed line-clamp-4">{review.comment}</p>
                       </div>
                     ))}
                   </div>
@@ -885,9 +915,9 @@ const ProductPage = () => {
                   <div className="text-center mt-8">
                     <button
                       onClick={() => setReviewPage((prev) => prev + 1)}
-                      className="border-2 border-gray-900 text-gray-900 px-10 py-3 rounded-xl text-sm font-semibold hover:bg-gray-900 hover:text-white transition-colors"
+                      className="bg-black text-white px-6 py-2 rounded-full text-xs font-semibold hover:bg-gray-900 transition-colors"
                     >
-                      Load More Reviews
+                      Load more
                     </button>
                   </div>
                 )}
@@ -898,7 +928,7 @@ const ProductPage = () => {
       </div>
 
       {/* Sticky Mobile CTA Bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 py-3 safe-area-pb">
+      <div className="hidden lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 px-4 py-3 safe-area-pb">
         <div className="flex gap-3">
           {isOutOfStock ? (
             <button
@@ -934,6 +964,7 @@ const ProductPage = () => {
             <FaWhatsapp className="w-5 h-5 text-white" />
           </a>
         </div>
+      </div>
       </div>
     </div>
   );
