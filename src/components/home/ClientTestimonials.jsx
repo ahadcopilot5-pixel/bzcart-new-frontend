@@ -67,63 +67,70 @@ const ClientTestimonials = () => {
         </h2>
 
         {/* Testimonial Card */}
-        <div className="bg-orange-500 rounded-3xl p-8 md:p-12 relative overflow-hidden">
-          {/* Main Content */}
-          <div className="flex flex-col items-center text-center px-8 md:px-16">
-            {/* Profile Image */}
-            <div className="relative mb-6">
+        <div className="bg-orange-500 rounded-3xl overflow-hidden shadow-2xl">
+          {/* Layout: image left on md+, stacked on mobile */}
+          <div className="flex flex-col md:flex-row">
+
+            {/* Image Panel */}
+            <div className="w-full md:w-2/5 relative">
               <img
                 src={currentTestimonial.image}
                 alt={currentTestimonial.name}
-                className="w-24 h-24 md:w-28 md:h-28 rounded-full border-4 border-white object-cover shadow-lg transition-all duration-500"
+                className="w-full h-64 md:h-full object-cover transition-all duration-500"
+                style={{ minHeight: "280px" }}
               />
+              {/* Overlay gradient on mobile bottom, on md right side */}
+              <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-orange-500/80 via-transparent to-transparent" />
             </div>
 
-            {/* Name */}
-            <h3 className="text-xl md:text-2xl font-semibold text-white mb-4">
-              {currentTestimonial.name}
-            </h3>
+            {/* Content Panel */}
+            <div className="flex-1 flex flex-col justify-between p-8 md:p-10">
+              {/* Quote icon */}
+              <div className="text-white/30 text-7xl font-serif leading-none select-none mb-2">"</div>
 
-            {currentTestimonial.role && (
-              <p className="text-white/70 text-sm md:text-base mb-3">
-                {currentTestimonial.role}
+              {/* Name & Role */}
+              <div className="mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-white">
+                  {currentTestimonial.name}
+                </h3>
+                {currentTestimonial.role && (
+                  <p className="text-white/70 text-sm mt-1">{currentTestimonial.role}</p>
+                )}
+              </div>
+
+              {/* Testimonial Text */}
+              <p className="text-white/90 text-sm md:text-base leading-relaxed mb-6 transition-all duration-500">
+                {currentTestimonial.text}
               </p>
-            )}
 
-            {/* Testimonial Text */}
-            <p className="text-white/90 text-sm md:text-base leading-relaxed mb-6 max-w-lg transition-all duration-500">
-              {currentTestimonial.text}
-            </p>
+              {/* Rating Badge */}
+              <div className="flex items-center gap-3 bg-white rounded-2xl px-5 py-3 shadow-md self-start">
+                <span className="font-bold text-gray-800 text-lg">
+                  {Number(currentTestimonial.rating || 0).toFixed(1)}
+                </span>
+                <span className="text-gray-300 text-sm">/</span>
+                <span className="text-gray-500 text-sm font-medium">
+                  {currentTestimonial.reviewsLabel || "Verified Review"}
+                </span>
+                <div className="flex">{renderStars(currentTestimonial.rating)}</div>
+              </div>
 
-            {/* Rating */}
-            <div className="flex items-center gap-3 bg-white rounded-full px-4 py-2 shadow-md">
-              <span className="font-bold text-gray-800">
-                {Number(currentTestimonial.rating || 0).toFixed(1)}
-              </span>
-              <span className="text-gray-500 text-sm">/</span>
-              <span className="text-gray-500 text-sm">
-                {currentTestimonial.reviewsLabel || "Verified Review"}
-              </span>
-              <div className="flex">
-                {renderStars(currentTestimonial.rating)}
+              {/* Slide Indicators */}
+              <div className="flex gap-2 mt-6">
+                {testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === currentIndex
+                        ? "bg-white w-6"
+                        : "bg-white/40 w-2 hover:bg-white/60"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
               </div>
             </div>
-          </div>
-
-          {/* Slide Indicators */}
-          <div className="flex justify-center gap-2 mt-8">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-white w-6"
-                    : "bg-white/50 hover:bg-white/70"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
           </div>
         </div>
       </div>
