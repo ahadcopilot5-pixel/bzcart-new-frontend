@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   HiX,
   HiOutlineShoppingCart,
@@ -19,27 +19,44 @@ const CartDrawer = () => {
     removeFromCart,
     loading,
   } = useCart();
+  const location = useLocation();
+  const previousBodyOverflow = useRef("");
 
-  // Close on escape key
+  // Lock body scroll while drawer is open and close on escape/back.
   useEffect(() => {
+    if (!isCartOpen) return;
+
+    previousBodyOverflow.current = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
     const handleEscape = (e) => {
       if (e.key === "Escape") closeCart();
     };
-    if (isCartOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
-    }
+    const handlePopState = () => closeCart();
+
+    document.addEventListener("keydown", handleEscape);
+    window.addEventListener("popstate", handlePopState);
+
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      window.removeEventListener("popstate", handlePopState);
+      document.body.style.overflow = previousBodyOverflow.current;
     };
   }, [isCartOpen, closeCart]);
+
+  // Safety: close drawer on route changes so overlay never blocks the next screen.
+  useEffect(() => {
+    if (isCartOpen) {
+      closeCart();
+    }
+  }, [location.pathname, location.search, isCartOpen, closeCart]);
 
   const handleRemoveItem = async (item) => {
     const result = await removeFromCart(
       item.product_id?._id,
       item.selected_image,
       item.selected_size,
+      item.selected_color,
     );
     if (result?.success) {
       showToast.success("Item removed from cart");

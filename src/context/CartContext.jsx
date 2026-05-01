@@ -71,9 +71,14 @@ export const CartProvider = ({ children }) => {
 
   // Remove item from cart
   const removeFromCart = useCallback(
-    async (productId, selectedImage, selectedSize = null) => {
+    async (
+      productId,
+      selectedImage,
+      selectedSize = null,
+      selectedColor = null,
+    ) => {
       try {
-        await cartAPI.remove(productId, selectedImage, selectedSize);
+        await cartAPI.remove(productId, selectedImage, selectedSize, selectedColor);
         await fetchCart();
         return { success: true };
       } catch (error) {
