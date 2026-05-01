@@ -87,18 +87,18 @@ const ClientTestimonials = () => {
         {/* Main Card */}
         <div className="bg-orange-500 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
 
-          {/* Left — full image */}
-          <div className="w-full md:w-1/2 min-h-[320px] md:min-h-[460px]">
+          {/* Left — image with orange padding border */}
+          <div className="w-full md:w-1/2 p-4">
             <img
               src={currentTestimonial.image}
               alt={currentTestimonial.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-2xl"
               style={{ minHeight: "320px" }}
             />
           </div>
 
           {/* Right — content */}
-          <div className="w-full md:w-1/2 flex flex-col justify-between p-7 md:p-8 gap-4">
+          <div className="w-full md:w-1/2 flex flex-col justify-between p-7 md:p-8 gap-2">
 
             {/* Location + Verified */}
             <div className="bg-white rounded-2xl px-4 py-3 flex flex-col gap-1 shadow-sm">
