@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   HiX,
   HiOutlineShoppingCart,
@@ -19,7 +19,6 @@ const CartDrawer = () => {
     removeFromCart,
     loading,
   } = useCart();
-  const location = useLocation();
   const previousBodyOverflow = useRef("");
 
   // Lock body scroll while drawer is open and close on escape/back.
@@ -43,13 +42,6 @@ const CartDrawer = () => {
       document.body.style.overflow = previousBodyOverflow.current;
     };
   }, [isCartOpen, closeCart]);
-
-  // Safety: close drawer on route changes so overlay never blocks the next screen.
-  useEffect(() => {
-    if (isCartOpen) {
-      closeCart();
-    }
-  }, [location.pathname, location.search, isCartOpen, closeCart]);
 
   const handleRemoveItem = async (item) => {
     const result = await removeFromCart(
