@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { showToast } from "../utils/helpers";
 import GlobalLoader from "../components/ui/GlobalLoader";
+import FaviconSpinner from "../components/ui/FaviconSpinner";
 import {
   HiOutlineHeart,
   HiHeart,
@@ -813,10 +814,11 @@ const ProductPage = () => {
                 {reviewsLoading ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[...Array(6)].map((_, i) => (
-                      <div key={i} className="bg-gray-50 rounded-2xl p-5 animate-pulse">
-                        <div className="h-4 bg-gray-200 rounded mb-4 w-24" />
-                        <div className="h-3 bg-gray-200 rounded mb-2 w-32" />
-                        <div className="h-16 bg-gray-200 rounded" />
+                      <div
+                        key={i}
+                        className="bg-orange-50/60 border border-orange-100 rounded-2xl p-5 min-h-36 flex items-center justify-center"
+                      >
+                        <FaviconSpinner size={40} showGlow />
                       </div>
                     ))}
                   </div>

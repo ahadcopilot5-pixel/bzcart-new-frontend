@@ -8,6 +8,7 @@ import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { productAPI } from "../services/api";
 import { getProductUrl } from "../utils/helpers";
 import ClientTestimonials from "../components/home/ClientTestimonials";
+import FaviconSpinner from "../components/ui/FaviconSpinner";
 
 const features = [
   { icon: LiaShippingFastSolid, text: "Free Shipping" },
@@ -286,8 +287,8 @@ const CategorySkeleton = () => (
   <section className="py-6 md:py-10">
     <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
       <div className="flex items-center justify-between mb-4 md:mb-6">
-        <div className="h-6 w-32 bg-gray-200 rounded animate-pulse" />
-        <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
+        <div className="h-6 w-32 bg-orange-100 rounded" />
+        <div className="h-4 w-16 bg-orange-100 rounded" />
       </div>
       <div className="flex gap-4 overflow-hidden">
         {[1, 2, 3, 4].map((i) => (
@@ -296,10 +297,12 @@ const CategorySkeleton = () => (
             className="flex-shrink-0 w-[200px] md:w-[240px] lg:w-[280px]"
           >
             <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-              <div className="aspect-square bg-gray-200 animate-pulse" />
+              <div className="aspect-square bg-orange-50 flex items-center justify-center">
+                <FaviconSpinner size={44} showGlow />
+              </div>
               <div className="p-4 space-y-2">
-                <div className="h-4 bg-gray-200 rounded animate-pulse mx-auto w-3/4" />
-                <div className="h-4 bg-gray-200 rounded animate-pulse mx-auto w-1/2" />
+                <div className="h-4 bg-orange-100 rounded mx-auto w-3/4" />
+                <div className="h-4 bg-orange-100 rounded mx-auto w-1/2" />
               </div>
             </div>
           </div>

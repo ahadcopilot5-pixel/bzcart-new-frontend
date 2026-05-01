@@ -5,6 +5,7 @@ import { FaCheck } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import { orderAPI } from "../services/api";
 import { showToast } from "../utils/helpers";
+import GlobalLoader from "../components/ui/GlobalLoader";
 
 // Format price helper
 const formatPrice = (price) => {
@@ -111,18 +112,7 @@ const TrackingPage = () => {
   }, [fetchOrders]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
-        <div className="relative">
-          <div className="absolute inset-0 bg-orange-400/20 blur-2xl rounded-full scale-150 animate-pulse"></div>
-          <img src="/logo.png" alt="EZBZCART" className="h-12 relative z-10" />
-        </div>
-        <div className="mt-8 relative">
-          <div className="w-12 h-12 rounded-full border-[3px] border-gray-200"></div>
-          <div className="w-12 h-12 rounded-full border-[3px] border-transparent border-t-orange-500 border-r-orange-400 absolute top-0 left-0 animate-spin"></div>
-        </div>
-      </div>
-    );
+    return <GlobalLoader size={48} text="Loading your orders..." />;
   }
 
   if (orders.length === 0) {

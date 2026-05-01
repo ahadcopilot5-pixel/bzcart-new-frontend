@@ -5,6 +5,7 @@ import { LiaShippingFastSolid } from "react-icons/lia";
 import { BiSupport } from "react-icons/bi";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { ClientTestimonials } from "../components/home";
+import SectionLoader from "../components/ui/SectionLoader";
 import { categoryAPI, productAPI } from "../services/api";
 import { createSlug } from "../utils/helpers";
 
@@ -173,15 +174,11 @@ const TrendingVapes = ({ products, loading }) => {
 
         {/* Products Grid - 2 columns on mobile, 4 on desktop */}
         {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-200 rounded-lg aspect-square" />
-                <div className="mt-2 h-4 bg-gray-200 rounded" />
-                <div className="mt-1 h-3 bg-gray-200 rounded w-1/2" />
-              </div>
-            ))}
-          </div>
+          <SectionLoader
+            count={8}
+            columnsClass="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6"
+            cardClass="aspect-square"
+          />
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
             {products.map((product) => (

@@ -5,6 +5,7 @@ import WinterJackets from "../components/home/WinterJackets";
 import ClientTestimonials from "../components/home/ClientTestimonials";
 import { productAPI } from "../services/api";
 import { createSlug } from "../utils/helpers";
+import SectionLoader from "../components/ui/SectionLoader";
 
 const formatPrice = (price) => `Rs.${price?.toLocaleString() || 0} PKR`;
 
@@ -42,15 +43,11 @@ const MensClothingProducts = () => {
           </h2>
 
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3" />
-                  <div className="h-4 bg-gray-200 rounded mb-2" />
-                  <div className="h-3 bg-gray-200 rounded w-1/2" />
-                </div>
-              ))}
-            </div>
+            <SectionLoader
+              count={8}
+              columnsClass="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6"
+              cardClass="aspect-[3/4]"
+            />
           ) : displayProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
               {displayProducts.map((product) => (

@@ -1,19 +1,16 @@
 import { memo } from "react";
 import ProductCard from "./ProductCard";
+import SectionLoader from "./SectionLoader";
 
 const ProductGrid = memo(
   ({ products, loading, emptyMessage = "No products found" }) => {
     if (loading) {
       return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3" />
-              <div className="h-4 bg-gray-200 rounded mb-2" />
-              <div className="h-4 bg-gray-200 rounded w-2/3" />
-            </div>
-          ))}
-        </div>
+        <SectionLoader
+          count={8}
+          columnsClass="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6"
+          cardClass="aspect-[3/4]"
+        />
       );
     }
 

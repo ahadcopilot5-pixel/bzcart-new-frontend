@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { productAPI } from "../../services/api";
 import { createSlug } from "../../utils/helpers";
+import SectionLoader from "../ui/SectionLoader";
 
 const formatPrice = (price) => `Rs.${price?.toLocaleString() || 0} PKR`;
 
@@ -87,15 +88,11 @@ const TrendingStyles2 = () => {
       <div className="max-w-6xl mx-auto px-6 lg:px-12">
         {/* Products Grid - 4 columns */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3" />
-                <div className="h-4 bg-gray-200 rounded mb-1" />
-                <div className="h-3 bg-gray-200 rounded w-1/2" />
-              </div>
-            ))}
-          </div>
+          <SectionLoader
+            count={4}
+            columnsClass="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6"
+            cardClass="aspect-[3/4]"
+          />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {displayProducts.map((product) => (

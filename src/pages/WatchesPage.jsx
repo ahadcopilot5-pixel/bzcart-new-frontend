@@ -5,6 +5,7 @@ import { LiaShippingFastSolid } from "react-icons/lia";
 import { BiSupport } from "react-icons/bi";
 import { HiOutlineRefresh } from "react-icons/hi";
 import { ClientTestimonials } from "../components/home";
+import SectionLoader from "../components/ui/SectionLoader";
 import { categoryAPI, productAPI } from "../services/api";
 import { createSlug } from "../utils/helpers";
 
@@ -407,15 +408,11 @@ const TrendingWatches = ({ products, loading }) => {
         </h2>
 
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3" />
-                <div className="h-4 bg-gray-200 rounded mb-2" />
-                <div className="h-3 bg-gray-200 rounded w-1/2" />
-              </div>
-            ))}
-          </div>
+          <SectionLoader
+            count={8}
+            columnsClass="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6"
+            cardClass="aspect-[3/4]"
+          />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {displayProducts.map((product) => (
@@ -470,15 +467,11 @@ const MoreTrendingWatches = ({ products, loading }) => {
         </h2>
 
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3" />
-                <div className="h-4 bg-gray-200 rounded mb-2" />
-                <div className="h-3 bg-gray-200 rounded w-1/2" />
-              </div>
-            ))}
-          </div>
+          <SectionLoader
+            count={8}
+            columnsClass="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6"
+            cardClass="aspect-[3/4]"
+          />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {displayProducts.map((product) => (

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { productAPI } from "../../services/api";
 import { createSlug } from "../../utils/helpers";
+import SectionLoader from "../ui/SectionLoader";
 
 const formatPrice = (price) => `Rs.${price?.toLocaleString() || 0} PKR`;
 
@@ -64,13 +65,11 @@ const WinterJackets = () => {
 
         {/* Mobile: single column, Desktop: grid */}
         {loading ? (
-          <div className="flex flex-col gap-5 lg:grid lg:grid-cols-4 lg:gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="w-full aspect-[3/4] bg-gray-200 rounded-xl" />
-              </div>
-            ))}
-          </div>
+          <SectionLoader
+            count={4}
+            columnsClass="flex flex-col gap-5 lg:grid lg:grid-cols-4 lg:gap-6"
+            cardClass="w-full aspect-[3/4]"
+          />
         ) : (
           <div className="flex flex-col gap-5 lg:grid lg:grid-cols-4 lg:gap-6">
             {displayItems.map((item) => (

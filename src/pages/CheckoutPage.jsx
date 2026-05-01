@@ -5,6 +5,7 @@ import { cartAPI, orderAPI } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { showToast } from "../utils/helpers";
+import FaviconSpinner from "../components/ui/FaviconSpinner";
 
 // Format price helper
 const formatPrice = (price) => {
@@ -462,7 +463,7 @@ const CheckoutPage = () => {
                   {/* Loading State */}
                   {loading ? (
                     <div className="py-12 flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
+                      <FaviconSpinner size={44} showGlow />
                     </div>
                   ) : cartItems.length === 0 ? (
                     <div className="py-12 text-center">
