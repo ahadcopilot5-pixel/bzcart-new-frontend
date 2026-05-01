@@ -89,7 +89,7 @@ const ClientTestimonials = () => {
 
           {/* Left — image with orange padding border */}
           <div className="w-full md:w-1/2 p-3 flex">
-            <div className="relative w-full rounded-2xl overflow-hidden" style={{ minHeight: "300px" }}>
+              <div className="relative w-full rounded-2xl overflow-hidden min-h-[420px] md:min-h-[520px]">
               <img
                 src={currentTestimonial.image}
                 alt={currentTestimonial.name}
