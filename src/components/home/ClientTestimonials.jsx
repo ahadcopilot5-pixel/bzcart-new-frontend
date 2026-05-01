@@ -53,7 +53,7 @@ const ClientTestimonials = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="py-8 px-4 bg-white">
+    <section className="py-12 px-4 bg-white">
       <div className="max-w-4xl mx-auto">
 
         {/* Badge */}
@@ -67,7 +67,7 @@ const ClientTestimonials = () => {
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl md:text-3xl font-extrabold text-center text-gray-900 mb-2">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-2">
           What Our Clients Say <br />About <span className="text-orange-500">Us</span>
         </h2>
 
@@ -93,15 +93,15 @@ const ClientTestimonials = () => {
               src={currentTestimonial.image}
               alt={currentTestimonial.name}
               className="w-full h-full object-cover rounded-2xl"
-              style={{ minHeight: "240px", maxHeight: "360px" }}
+              style={{ minHeight: "300px", maxHeight: "420px" }}
             />
           </div>
 
           {/* Right — content */}
-          <div className="w-full md:w-1/2 flex flex-col justify-between p-5 md:p-6 gap-2">
+          <div className="w-full md:w-1/2 flex flex-col justify-between p-6 md:p-7 gap-3">
 
             {/* Location + Verified */}
-            <div className="bg-white rounded-2xl px-3 py-2 flex flex-col gap-0.5 shadow-sm">
+            <div className="bg-white rounded-2xl px-4 py-2.5 flex flex-col gap-0.5 shadow-sm">
               <div className="flex items-center gap-2 text-gray-800 font-bold text-sm md:text-base">
                 <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
@@ -117,7 +117,7 @@ const ClientTestimonials = () => {
             </div>
 
             {/* Rating */}
-            <div className="bg-white rounded-2xl px-3 py-2 flex items-center gap-3 shadow-sm">
+            <div className="bg-white rounded-2xl px-4 py-2.5 flex items-center gap-3 shadow-sm">
               <span className="text-2xl font-extrabold text-gray-800">
                 {Number(currentTestimonial.rating || 0).toFixed(1)}
               </span>
