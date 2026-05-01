@@ -475,7 +475,7 @@ const ProductPage = () => {
           </div>
 
           {/* Right: Product Details */}
-          <div className="mt-5 lg:mt-0 lg:w-[52%] px-4 lg:px-0">
+          <div className="-mt-6 relative z-10 bg-white rounded-t-[30px] px-4 pt-6 lg:mt-0 lg:w-[52%] lg:px-0 lg:pt-0 lg:bg-transparent lg:rounded-none">
 
             {/* Brand + Stock Row */}
             <div className="flex items-center justify-between mb-2">
