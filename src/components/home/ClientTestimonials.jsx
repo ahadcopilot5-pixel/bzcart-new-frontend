@@ -88,13 +88,14 @@ const ClientTestimonials = () => {
         <div className="bg-orange-500 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
 
           {/* Left — image with orange padding border */}
-          <div className="w-full md:w-1/2 p-3">
-            <img
-              src={currentTestimonial.image}
-              alt={currentTestimonial.name}
-              className="w-full h-full object-cover rounded-2xl"
-              style={{ minHeight: "300px", maxHeight: "420px" }}
-            />
+          <div className="w-full md:w-1/2 p-3 flex">
+            <div className="relative w-full rounded-2xl overflow-hidden" style={{ minHeight: "300px" }}>
+              <img
+                src={currentTestimonial.image}
+                alt={currentTestimonial.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
           </div>
 
           {/* Right — content */}
