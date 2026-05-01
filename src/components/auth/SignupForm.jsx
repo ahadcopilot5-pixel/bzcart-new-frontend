@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { useAuth } from "../../context/AuthContext";
@@ -9,6 +8,7 @@ import { showToast } from "../../utils/helpers";
 import AuthCard from "./AuthCard";
 import InputField from "../ui/InputField";
 import Button from "../ui/Button";
+import { GoogleLogin } from "@react-oauth/google";
 
 const SignupForm = () => {
   const navigate = useNavigate();
@@ -22,6 +22,32 @@ const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const { credential } = credentialResponse;
+      if (!credential) {
+        showToast.error("Google signup failed");
+        return;
+      }
+
+      const result = await authAPI.googleLogin(credential);
+      login(
+        {
+          _id: result._id,
+          username: result.username,
+          email: result.email,
+          role: result.role,
+          profileImage: result.profileImage,
+        },
+        result.token,
+      );
+      showToast.success("Google signup successful!");
+      navigate("/");
+    } catch (error) {
+      showToast.error(error.message || "Google signup failed");
+    }
+  };
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -141,13 +167,16 @@ const SignupForm = () => {
 
         {/* Social Login */}
         <div className="flex items-center justify-center gap-4">
-          <button
-            type="button"
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-xs text-gray-600"
-          >
-            <FcGoogle size={16} />
-            <span>Google</span>
-          </button>
+          <div className="flex-1 flex items-center justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => showToast.error("Google signup failed")}
+              width="100%"
+              shape="pill"
+              text="signup_with"
+              logo_alignment="center"
+            />
+          </div>
           <button
             type="button"
             className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-xs text-gray-600"
