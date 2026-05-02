@@ -16,13 +16,13 @@ import CartDrawer from "../ui/CartDrawer";
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
-  { name: "Men's Clothes", href: "/mens-clothing" },
+  { name: "Pods & Vape", href: "/pods" },
   { name: "Watches", href: "/watches" },
   { name: "Shoes", href: "/shoes" },
 ];
 
 const MORE_CATEGORIES = [
-  { name: "Pods & Vape", href: "/pods" },
+  { name: "Men's Clothes", href: "/mens-clothing" },
   { name: "Care Products", href: "/care" },
 ];
 

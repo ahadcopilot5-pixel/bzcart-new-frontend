@@ -18,11 +18,11 @@ const features = [
 
 // Category definitions matching backend enum
 const categoryDefinitions = [
+  { slug: "pods-vape", name: "Pods & Vape", href: "/pods" },
   { slug: "mens-clothing", name: "Men's Clothing", href: "/mens-clothing" },
   { slug: "watches", name: "Watches", href: "/watches" },
   { slug: "shoes", name: "Shoes", href: "/shoes" },
   { slug: "mens-care", name: "Men's Care", href: "/care" },
-  { slug: "pods-vape", name: "Pods & Vape", href: "/pods" },
 ];
 
 const formatPrice = (price) =>
@@ -164,17 +164,19 @@ const CategorySlider = ({ category, products }) => {
             </button>
           )}
 
-          {/* Products Slider */}
-          <div
-            ref={sliderRef}
-            className="flex gap-3 md:gap-4 overflow-x-auto scroll-smooth pb-2"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {products.map((product) => (
-              <div key={product._id} className="flex-shrink-0 w-[155px] md:w-[240px] lg:w-[280px]">
-                <ProductCard product={product} />
-              </div>
-            ))}
+          {/* Products Slider — negative right margin on mobile so partial next card peeks */}
+          <div className="-mr-4 md:mr-0">
+            <div
+              ref={sliderRef}
+              className="flex gap-3 md:gap-4 overflow-x-auto scroll-smooth pb-2 pr-4 md:pr-0"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {products.map((product) => (
+                <div key={product._id} className="flex-shrink-0 w-[42vw] md:w-[240px] lg:w-[280px]">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right Arrow */}
