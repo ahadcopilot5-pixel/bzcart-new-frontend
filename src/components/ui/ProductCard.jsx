@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { memo } from "react";
+import { FaStar } from "react-icons/fa";
 import { getProductUrl } from "../../utils/helpers";
 
 const ProductCard = memo(({ product }) => {
@@ -47,7 +48,7 @@ const ProductCard = memo(({ product }) => {
         {/* Rating Badge */}
         {rating > 0 && (
           <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-xs font-medium px-2 py-1 rounded flex items-center gap-1">
-            <span className="text-yellow-400">★</span>
+            <FaStar className="text-yellow-400 w-3 h-3" />
             <span>{rating.toFixed(1)}</span>
           </div>
         )}

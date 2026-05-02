@@ -21,7 +21,7 @@ import {
   HiOutlineStar,
   HiCheck,
 } from "react-icons/hi";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaStar, FaRegStar } from "react-icons/fa";
 
 // Format price helper
 const formatPrice = (price) => {
@@ -258,14 +258,9 @@ const ProductPage = () => {
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
-      <span
-        key={index}
-        className={`text-sm ${
-          index < rating ? "text-yellow-400" : "text-gray-300"
-        }`}
-      >
-        ★
-      </span>
+      index < rating
+        ? <FaStar key={index} className="text-yellow-400 text-sm" />
+        : <FaRegStar key={index} className="text-gray-300 text-sm" />
     ));
   };
 

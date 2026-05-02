@@ -1,11 +1,37 @@
 import { useState, useEffect } from "react";
+import { MdVerifiedUser, MdLocalShipping, MdWorkspacePremium, MdHeadset } from "react-icons/md";
+import { FaStar, FaRegStar } from "react-icons/fa";
 import { testimonialAPI } from "../../services/api";
 
 const trustBadges = [
-  { icon: "🛡️", title: "100% Secure Payment", sub: "Safe & Protected" },
-  { icon: "🚚", title: "Fast Delivery", sub: "All Over Pakistan" },
-  { icon: "🏅", title: "100% Satisfaction", sub: "Money Back Guarantee" },
-  { icon: "🎧", title: "24/7 Support", sub: "We're Here to Help" },
+  {
+    Icon: MdVerifiedUser,
+    gradient: "from-blue-500 to-blue-700",
+    shadow: "shadow-blue-200",
+    title: "100% Secure Payment",
+    sub: "Safe & Protected",
+  },
+  {
+    Icon: MdLocalShipping,
+    gradient: "from-orange-400 to-orange-600",
+    shadow: "shadow-orange-200",
+    title: "Fast Delivery",
+    sub: "All Over Pakistan",
+  },
+  {
+    Icon: MdWorkspacePremium,
+    gradient: "from-yellow-400 to-yellow-600",
+    shadow: "shadow-yellow-200",
+    title: "100% Satisfaction",
+    sub: "Money Back Guarantee",
+  },
+  {
+    Icon: MdHeadset,
+    gradient: "from-green-500 to-green-700",
+    shadow: "shadow-green-200",
+    title: "24/7 Support",
+    sub: "We're Here to Help",
+  },
 ];
 
 const ClientTestimonials = () => {
@@ -126,7 +152,9 @@ const ClientTestimonials = () => {
               <div className="flex flex-col">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className={`text-lg ${i < currentTestimonial.rating ? "text-yellow-400" : "text-gray-200"}`}>★</span>
+                    i < currentTestimonial.rating
+                      ? <FaStar key={i} className="text-yellow-400 text-lg" />
+                      : <FaRegStar key={i} className="text-gray-200 text-lg" />
                   ))}
                 </div>
                 <span className="text-gray-500 text-xs">{currentTestimonial.reviewsLabel || "Verified Review"}</span>
@@ -172,7 +200,12 @@ const ClientTestimonials = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
           {trustBadges.map((badge) => (
             <div key={badge.title} className="flex items-center gap-3 border border-gray-100 rounded-2xl px-4 py-4 shadow-sm bg-white">
-              <span className="text-2xl">{badge.icon}</span>
+              <div
+                className={`flex-shrink-0 w-11 h-11 rounded-2xl bg-gradient-to-br ${badge.gradient} ${badge.shadow} shadow-lg flex items-center justify-center`}
+                style={{ boxShadow: undefined }}
+              >
+                <badge.Icon className="w-6 h-6 text-white drop-shadow" />
+              </div>
               <div>
                 <p className="text-gray-800 font-bold text-xs md:text-sm leading-tight">{badge.title}</p>
                 <p className="text-gray-400 text-xs">{badge.sub}</p>
