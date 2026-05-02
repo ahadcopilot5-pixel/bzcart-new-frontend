@@ -224,12 +224,11 @@ const HeroSection = ({ featuredProducts = [] }) => {
             {/* Left Content */}
             <div className="flex-1 space-y-6">
               <div>
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight tracking-wide">
+                <h2 className="text-3xl lg:text-4xl xl:text-5xl font-light italic text-gray-500 leading-tight tracking-tight">
                   DISCOVER YOUR
-                </h1>
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-wide">
-                  <span className="text-gray-900">SIGNATURE </span>
-                  <span className="text-orange-500">LOOK</span>
+                </h2>
+                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight tracking-tight mt-1">
+                  SIGNATURE LOOK
                 </h1>
               </div>
 
@@ -244,9 +243,10 @@ const HeroSection = ({ featuredProducts = [] }) => {
 
               <Link
                 to={activeProduct ? getProductUrl(activeProduct) : "/mens-clothing"}
-                className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-full text-base font-medium transition-colors"
+                className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-sm text-base font-medium transition-colors"
               >
                 {activeProduct ? "Shop Now" : "Explore Collection"}
+                <IoChevronForward className="w-4 h-4" />
               </Link>
             </div>
 
@@ -295,12 +295,11 @@ const HeroSection = ({ featuredProducts = [] }) => {
       <div className="md:hidden px-5 py-6">
         <div className="space-y-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 leading-tight tracking-wide">
+            <h2 className="text-2xl font-light italic text-gray-500 leading-tight tracking-tight">
               DISCOVER YOUR
-            </h1>
-            <h1 className="text-3xl font-bold leading-tight tracking-wide">
-              <span className="text-gray-900">SIGNATURE </span>
-              <span className="text-orange-500">LOOK</span>
+            </h2>
+            <h1 className="text-3xl font-bold text-gray-900 leading-tight tracking-tight mt-1">
+              SIGNATURE LOOK
             </h1>
           </div>
 
@@ -344,9 +343,10 @@ const HeroSection = ({ featuredProducts = [] }) => {
 
           <Link
             to={activeProduct ? getProductUrl(activeProduct) : "/mens-clothing"}
-            className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-sm font-medium transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-6 py-2.5 rounded-sm text-sm font-medium transition-colors"
           >
             {activeProduct ? "Shop Now" : "Explore Collection"}
+            <IoChevronForward className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>
