@@ -80,7 +80,7 @@ const TrustBadge = ({ Icon, color, bg, title, sub }) => (
   </div>
 );
 
-const SPEED = 44;
+const SPEED = 18;
 
 const ClientTestimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
@@ -140,8 +140,6 @@ const ClientTestimonials = () => {
         </div>
 
         <div className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-14 md:w-20 bg-gradient-to-r from-[#F5F4F2] to-transparent z-10" />
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-14 md:w-20 bg-gradient-to-l from-[#F5F4F2] to-transparent z-10" />
           <div className="flex tm-track">
             {items.map((item, i) => (
               <div key={`${item._id || item.image}-${i}`} className="shrink-0" style={{ width: `${100 / cardsPerView}%` }}>
