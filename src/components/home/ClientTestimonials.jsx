@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import {
   MdHeadset,
@@ -80,11 +80,20 @@ const TrustBadge = ({ Icon, color, bg, title, sub }) => (
   </div>
 );
 
-const SPEED = 18;
+const SPEED_PX_PER_SEC = 70;
 
 const ClientTestimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [cardsPerView, setCardsPerView] = useState(4);
+  const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef(0);
+  const touchDeltaX = useRef(0);
+  const trackRef = useRef(null);
+  const frameRef = useRef(null);
+  const lastTimeRef = useRef(0);
+  const positionRef = useRef(0);
+  const dragOffsetRef = useRef(0);
+  const isDraggingRef = useRef(false);
 
   useEffect(() => {
     const load = async () => {
@@ -114,16 +123,69 @@ const ClientTestimonials = () => {
     [testimonials]
   );
 
+  useEffect(() => {
+    if (!trackRef.current || items.length === 0) return undefined;
+
+    const applyTransform = () => {
+      if (!trackRef.current) return;
+      trackRef.current.style.transform = `translate3d(${positionRef.current + dragOffsetRef.current}px, 0, 0)`;
+    };
+
+    const animate = (time) => {
+      if (!lastTimeRef.current) lastTimeRef.current = time;
+      const deltaSeconds = (time - lastTimeRef.current) / 1000;
+      lastTimeRef.current = time;
+
+      const fullTrackWidth = trackRef.current ? trackRef.current.scrollWidth : 0;
+      const loopWidth = fullTrackWidth / 3;
+
+      if (!isPaused && !isDraggingRef.current && loopWidth > 0) {
+        positionRef.current -= SPEED_PX_PER_SEC * deltaSeconds;
+        while (positionRef.current <= -loopWidth) {
+          positionRef.current += loopWidth;
+        }
+        while (positionRef.current > 0) {
+          positionRef.current -= loopWidth;
+        }
+      }
+
+      applyTransform();
+      frameRef.current = requestAnimationFrame(animate);
+    };
+
+    frameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+      lastTimeRef.current = 0;
+    };
+  }, [items.length, isPaused]);
+
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0].clientX;
+    touchDeltaX.current = 0;
+    setIsPaused(true);
+    isDraggingRef.current = true;
+  };
+
+  const handleTouchMove = (event) => {
+    touchDeltaX.current = event.touches[0].clientX - touchStartX.current;
+    dragOffsetRef.current = touchDeltaX.current;
+  };
+
+  const handleTouchEnd = () => {
+    positionRef.current += dragOffsetRef.current;
+    dragOffsetRef.current = 0;
+    touchDeltaX.current = 0;
+    isDraggingRef.current = false;
+    setIsPaused(false);
+  };
+
   if (!items.length) return null;
 
   return (
     <section className="py-14 md:py-20 bg-[#F5F4F2]">
-      <style>{`
-        @keyframes tm { from { transform: translateX(0) } to { transform: translateX(-33.3333%) } }
-        .tm-track { animation: tm ${SPEED}s linear infinite; will-change: transform; }
-        .tm-track:hover { animation-play-state: paused; }
-      `}</style>
-
       <div className="max-w-[1500px] mx-auto px-4 md:px-6">
 
         <div className="text-center mb-10">
@@ -139,8 +201,21 @@ const ClientTestimonials = () => {
           </p>
         </div>
 
-        <div className="relative overflow-hidden">
-          <div className="flex tm-track">
+        <div
+          className="relative overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+          style={{ touchAction: "pan-y" }}
+        >
+          <div
+            ref={trackRef}
+            className="flex"
+            style={{
+              willChange: "transform",
+            }}
+          >
             {items.map((item, i) => (
               <div key={`${item._id || item.image}-${i}`} className="shrink-0" style={{ width: `${100 / cardsPerView}%` }}>
                 <TestimonialCard item={item} />
