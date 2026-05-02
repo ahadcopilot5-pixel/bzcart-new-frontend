@@ -197,22 +197,23 @@ const CategorySlider = ({ category, products }) => {
 // Hero Section Component
 const HeroSection = ({ featuredProducts = [] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
 
-  // Auto-rotate every 3 seconds
+  // Auto-rotate with fade animation every 3 seconds
   useEffect(() => {
     if (featuredProducts.length < 2) return;
     const timer = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % featuredProducts.length);
+      setVisible(false);
+      setTimeout(() => {
+        setActiveIndex((i) => (i + 1) % featuredProducts.length);
+        setVisible(true);
+      }, 400);
     }, 3000);
     return () => clearInterval(timer);
   }, [featuredProducts.length]);
 
   const showProducts = featuredProducts.length > 0;
-
-  // 2x2 grid: show 4 products starting from activeIndex
-  const gridProducts = showProducts
-    ? Array.from({ length: 4 }, (_, i) => featuredProducts[(activeIndex + i) % featuredProducts.length])
-    : [];
+  const activeProduct = showProducts ? featuredProducts[activeIndex] : null;
 
   return (
     <section className="bg-white">
@@ -232,39 +233,39 @@ const HeroSection = ({ featuredProducts = [] }) => {
                 </h1>
               </div>
 
+              {activeProduct && (
+                <div
+                  style={{ transition: "opacity 0.4s ease", opacity: visible ? 1 : 0 }}
+                >
+                  <p className="text-base font-semibold text-gray-800 line-clamp-1">{getProductName(activeProduct)}</p>
+                  <p className="text-sm text-orange-500 font-bold">{formatPrice(getProductPrice(activeProduct))}</p>
+                </div>
+              )}
+
               <Link
-                to="/mens-clothing"
+                to={activeProduct ? getProductUrl(activeProduct) : "/mens-clothing"}
                 className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-full text-base font-medium transition-colors"
               >
-                Explore Collection
+                {activeProduct ? "Shop Now" : "Explore Collection"}
               </Link>
             </div>
 
-            {/* Right Content - Product Grid or fallback image */}
+            {/* Right Content - Single product with fade */}
             <div className="flex-1 flex justify-center">
               {showProducts ? (
-                <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
-                  {gridProducts.map((product, i) => (
-                    <Link
-                      key={`${product._id}-${i}`}
-                      to={getProductUrl(product)}
-                      className="group bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-colors"
-                    >
-                      <div className="aspect-square p-3 flex items-center justify-center">
-                        <img
-                          src={getProductImage(product)}
-                          alt={getProductName(product)}
-                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="px-2 pb-2 text-center">
-                        <p className="text-xs font-medium text-gray-800 line-clamp-1">{getProductName(product)}</p>
-                        <p className="text-xs text-orange-500 font-semibold">{formatPrice(getProductPrice(product))}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
+                <Link
+                  to={getProductUrl(activeProduct)}
+                  className="group w-full max-w-sm"
+                  style={{ transition: "opacity 0.4s ease", opacity: visible ? 1 : 0 }}
+                >
+                  <div className="bg-gray-50 rounded-3xl border border-gray-100 overflow-hidden aspect-square flex items-center justify-center p-6">
+                    <img
+                      src={getProductImage(activeProduct)}
+                      alt={getProductName(activeProduct)}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                </Link>
               ) : (
                 <img
                   src="/home.png"
@@ -274,6 +275,19 @@ const HeroSection = ({ featuredProducts = [] }) => {
               )}
             </div>
           </div>
+
+          {/* Dot indicators */}
+          {showProducts && (
+            <div className="flex justify-center gap-2 mt-6">
+              {featuredProducts.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setVisible(false); setTimeout(() => { setActiveIndex(i); setVisible(true); }, 400); }}
+                  className={`w-2 h-2 rounded-full transition-all ${i === activeIndex ? "bg-orange-500 w-5" : "bg-gray-300"}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -290,45 +304,49 @@ const HeroSection = ({ featuredProducts = [] }) => {
             </h1>
           </div>
 
-          {/* Product grid or fallback */}
+          {/* Single product with fade */}
           {showProducts ? (
-            <div className="grid grid-cols-2 gap-2 w-full">
-              {gridProducts.map((product, i) => (
-                <Link
-                  key={`${product._id}-mobile-${i}`}
-                  to={getProductUrl(product)}
-                  className="group bg-gray-50 rounded-xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-colors"
-                >
-                  <div className="aspect-square p-2 flex items-center justify-center">
-                    <img
-                      src={getProductImage(product)}
-                      alt={getProductName(product)}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="px-2 pb-2 text-center">
-                    <p className="text-[11px] font-medium text-gray-800 line-clamp-1">{getProductName(product)}</p>
-                    <p className="text-[11px] text-orange-500 font-semibold">{formatPrice(getProductPrice(product))}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <Link
+              to={getProductUrl(activeProduct)}
+              className="group block w-full"
+              style={{ transition: "opacity 0.4s ease", opacity: visible ? 1 : 0 }}
+            >
+              <div className="bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden aspect-square flex items-center justify-center p-4">
+                <img
+                  src={getProductImage(activeProduct)}
+                  alt={getProductName(activeProduct)}
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="mt-2 text-center" style={{ transition: "opacity 0.4s ease", opacity: visible ? 1 : 0 }}>
+                <p className="text-sm font-semibold text-gray-800 line-clamp-1">{getProductName(activeProduct)}</p>
+                <p className="text-sm text-orange-500 font-bold">{formatPrice(getProductPrice(activeProduct))}</p>
+              </div>
+            </Link>
           ) : (
             <div className="w-full py-2">
-              <img
-                src="/home.png"
-                alt="Discover Your Signature Look"
-                className="w-full h-auto object-contain"
-              />
+              <img src="/home.png" alt="Discover Your Signature Look" className="w-full h-auto object-contain" />
+            </div>
+          )}
+
+          {/* Dot indicators */}
+          {showProducts && (
+            <div className="flex justify-center gap-2">
+              {featuredProducts.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setVisible(false); setTimeout(() => { setActiveIndex(i); setVisible(true); }, 400); }}
+                  className={`w-2 h-2 rounded-full transition-all ${i === activeIndex ? "bg-orange-500 w-5" : "bg-gray-300"}`}
+                />
+              ))}
             </div>
           )}
 
           <Link
-            to="/mens-clothing"
+            to={activeProduct ? getProductUrl(activeProduct) : "/mens-clothing"}
             className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-sm font-medium transition-colors"
           >
-            Explore Collection
+            {activeProduct ? "Shop Now" : "Explore Collection"}
           </Link>
         </div>
       </div>
