@@ -195,7 +195,25 @@ const CategorySlider = ({ category, products }) => {
 };
 
 // Hero Section Component
-const HeroSection = () => {
+const HeroSection = ({ featuredProducts = [] }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Auto-rotate every 3 seconds
+  useEffect(() => {
+    if (featuredProducts.length < 2) return;
+    const timer = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % featuredProducts.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [featuredProducts.length]);
+
+  const showProducts = featuredProducts.length > 0;
+
+  // 2x2 grid: show 4 products starting from activeIndex
+  const gridProducts = showProducts
+    ? Array.from({ length: 4 }, (_, i) => featuredProducts[(activeIndex + i) % featuredProducts.length])
+    : [];
+
   return (
     <section className="bg-white">
       {/* Desktop Layout */}
@@ -222,13 +240,38 @@ const HeroSection = () => {
               </Link>
             </div>
 
-            {/* Right Content - Hero Image */}
+            {/* Right Content - Product Grid or fallback image */}
             <div className="flex-1 flex justify-center">
-              <img
-                src="/home.png"
-                alt="Discover Your Signature Look"
-                className="w-full max-w-lg h-auto object-contain"
-              />
+              {showProducts ? (
+                <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
+                  {gridProducts.map((product, i) => (
+                    <Link
+                      key={`${product._id}-${i}`}
+                      to={getProductUrl(product)}
+                      className="group bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-colors"
+                    >
+                      <div className="aspect-square p-3 flex items-center justify-center">
+                        <img
+                          src={getProductImage(product)}
+                          alt={getProductName(product)}
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="px-2 pb-2 text-center">
+                        <p className="text-xs font-medium text-gray-800 line-clamp-1">{getProductName(product)}</p>
+                        <p className="text-xs text-orange-500 font-semibold">{formatPrice(getProductPrice(product))}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <img
+                  src="/home.png"
+                  alt="Discover Your Signature Look"
+                  className="w-full max-w-lg h-auto object-contain"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -247,14 +290,39 @@ const HeroSection = () => {
             </h1>
           </div>
 
-          {/* Hero Image */}
-          <div className="w-full py-2">
-            <img
-              src="/home.png"
-              alt="Discover Your Signature Look"
-              className="w-full h-auto object-contain"
-            />
-          </div>
+          {/* Product grid or fallback */}
+          {showProducts ? (
+            <div className="grid grid-cols-2 gap-2 w-full">
+              {gridProducts.map((product, i) => (
+                <Link
+                  key={`${product._id}-mobile-${i}`}
+                  to={getProductUrl(product)}
+                  className="group bg-gray-50 rounded-xl overflow-hidden border border-gray-100 hover:border-orange-200 transition-colors"
+                >
+                  <div className="aspect-square p-2 flex items-center justify-center">
+                    <img
+                      src={getProductImage(product)}
+                      alt={getProductName(product)}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="px-2 pb-2 text-center">
+                    <p className="text-[11px] font-medium text-gray-800 line-clamp-1">{getProductName(product)}</p>
+                    <p className="text-[11px] text-orange-500 font-semibold">{formatPrice(getProductPrice(product))}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full py-2">
+              <img
+                src="/home.png"
+                alt="Discover Your Signature Look"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+          )}
 
           <Link
             to="/mens-clothing"
@@ -339,10 +407,18 @@ const HomePage = () => {
     return allProducts.filter((product) => product.category === categorySlug);
   };
 
+  // Pick up to 8 products spread across categories for hero rotation
+  const featuredProducts = allProducts.length > 0
+    ? (() => {
+        const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, 8);
+      })()
+    : [];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <HeroSection />
+      <HeroSection featuredProducts={featuredProducts} />
 
       {/* Category Sliders */}
       <div className="bg-gray-50/50">
