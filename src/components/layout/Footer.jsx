@@ -9,11 +9,23 @@ import {
 import { HiPhone, HiMail, HiLocationMarker } from "react-icons/hi";
 
 const socialLinks = [
-  { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
+  {
+    icon: FaInstagram,
+    href: "https://www.instagram.com/bzcart?igsh=MXhweWFybTM0dmVoZA==",
+    label: "Instagram",
+  },
   { icon: FaWhatsapp, href: "https://whatsapp.com", label: "WhatsApp" },
   { icon: FaYoutube, href: "https://youtube.com", label: "YouTube" },
-  { icon: FaFacebookF, href: "https://facebook.com", label: "Facebook" },
-  { icon: FaTiktok, href: "https://tiktok.com", label: "TikTok" },
+  {
+    icon: FaFacebookF,
+    href: "https://www.facebook.com/share/1Jqq4fa4zv/",
+    label: "Facebook",
+  },
+  {
+    icon: FaTiktok,
+    href: "https://www.tiktok.com/@bzcart.store?_r=1&_t=ZS-961R7VNfB9p",
+    label: "TikTok",
+  },
 ];
 
 const Footer = () => {
