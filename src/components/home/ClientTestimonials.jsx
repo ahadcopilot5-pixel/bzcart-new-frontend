@@ -1,217 +1,158 @@
-import { useState, useEffect } from "react";
-import { MdVerifiedUser, MdLocalShipping, MdWorkspacePremium, MdHeadset } from "react-icons/md";
+import { useEffect, useMemo, useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import {
+  MdHeadset,
+  MdLocalShipping,
+  MdLocationOn,
+  MdVerifiedUser,
+  MdWorkspacePremium,
+} from "react-icons/md";
 import { testimonialAPI } from "../../services/api";
 
 const trustBadges = [
-  {
-    Icon: MdVerifiedUser,
-    gradient: "from-blue-500 to-blue-700",
-    shadow: "shadow-blue-200",
-    title: "100% Secure Payment",
-    sub: "Safe & Protected",
-  },
-  {
-    Icon: MdLocalShipping,
-    gradient: "from-orange-400 to-orange-600",
-    shadow: "shadow-orange-200",
-    title: "Fast Delivery",
-    sub: "All Over Pakistan",
-  },
-  {
-    Icon: MdWorkspacePremium,
-    gradient: "from-yellow-400 to-yellow-600",
-    shadow: "shadow-yellow-200",
-    title: "100% Satisfaction",
-    sub: "Money Back Guarantee",
-  },
-  {
-    Icon: MdHeadset,
-    gradient: "from-green-500 to-green-700",
-    shadow: "shadow-green-200",
-    title: "24/7 Support",
-    sub: "We're Here to Help",
-  },
+  { Icon: MdVerifiedUser,    color: "#2563EB", bg: "#EFF6FF", title: "100% Secure Payment", sub: "Safe & Protected" },
+  { Icon: MdLocalShipping,   color: "#EA580C", bg: "#FFF7ED", title: "Fast Delivery",        sub: "All Over Pakistan" },
+  { Icon: MdWorkspacePremium,color: "#CA8A04", bg: "#FEFCE8", title: "100% Satisfaction",    sub: "Money Back Guarantee" },
+  { Icon: MdHeadset,         color: "#16A34A", bg: "#F0FDF4", title: "24/7 Support",         sub: "We're Here to Help" },
 ];
 
+const getRating    = (v) => { const n = Number(v); return Number.isNaN(n) ? 5 : Math.max(0, Math.min(5, Math.round(n))); };
+const getStoreName = (item) => item?.name || item?.city || "Customer";
+const getReviewText = (item) => item?.text || item?.review || "Verified customer review.";
+
+const StarRow = ({ rating }) => (
+  <div className="flex items-center gap-0.5 mb-2">
+    {Array.from({ length: 5 }).map((_, i) =>
+      i < rating
+        ? <FaStar    key={i} className="w-3 h-3 text-amber-400" />
+        : <FaRegStar key={i} className="w-3 h-3 text-gray-200"  />
+    )}
+  </div>
+);
+
+const TestimonialCard = ({ item }) => {
+  const rating = getRating(item?.rating);
+  return (
+    <article className="mx-2 rounded-2xl overflow-hidden bg-white border border-black/[0.08] hover:border-black/[0.15] hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.11)] transition-all duration-300 group">
+
+      <div className="relative overflow-hidden" style={{ aspectRatio: "3/4" }}>
+        <img
+          src={item?.image}
+          alt={getStoreName(item)}
+          className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+          loading="lazy"
+          draggable={false}
+        />
+        <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center gap-1.5 bg-black/50 backdrop-blur-sm rounded-lg px-2.5 py-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+          <span className="text-[10px] font-bold text-white uppercase tracking-wide">Verified Buyer</span>
+        </div>
+      </div>
+
+      <div className="px-3.5 pt-3.5 pb-4">
+        <StarRow rating={rating} />
+        <p className="text-[13.5px] font-extrabold text-gray-900 tracking-tight truncate mb-1.5 leading-tight">
+          {getStoreName(item)}
+        </p>
+        <p className="text-[11.5px] text-gray-500 leading-relaxed line-clamp-2 min-h-[2rem] mb-3">
+          {getReviewText(item)}
+        </p>
+        <div className="flex items-center gap-1 pt-2.5 border-t border-gray-100">
+          <MdLocationOn className="w-3 h-3 text-orange-400 flex-shrink-0" />
+          <span className="text-[10.5px] font-semibold text-gray-400 truncate">
+            {item?.city || "Pakistan"}
+          </span>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const TrustBadge = ({ Icon, color, bg, title, sub }) => (
+  <div className="flex items-center gap-3 bg-white border border-black/[0.07] rounded-2xl px-4 py-3.5 hover:-translate-y-0.5 hover:shadow-[0_4px_14px_rgba(0,0,0,0.07)] transition-all duration-200">
+    <div className="flex-shrink-0 w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: bg }}>
+      <Icon style={{ color, width: 19, height: 19 }} />
+    </div>
+    <div>
+      <p className="text-[12.5px] font-bold text-gray-800 leading-snug">{title}</p>
+      <p className="text-[11px] text-gray-400 mt-0.5">{sub}</p>
+    </div>
+  </div>
+);
+
+const SPEED = 44;
+
 const ClientTestimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState([]);
+  const [cardsPerView, setCardsPerView] = useState(4);
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    const load = async () => {
       try {
         const data = await testimonialAPI.getAll();
-        setTestimonials(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Error fetching testimonials:", error);
-        setTestimonials([]);
+        setTestimonials(Array.isArray(data) ? data.filter((d) => d?.image) : []);
+      } catch (e) {
+        console.error(e);
       }
     };
-
-    fetchTestimonials();
+    load();
   }, []);
 
   useEffect(() => {
-    if (testimonials.length <= 1) {
-      return undefined;
-    }
+    const update = () => {
+      if (window.innerWidth < 640) setCardsPerView(1.4);
+      else if (window.innerWidth < 1024) setCardsPerView(2.5);
+      else setCardsPerView(4);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 4000);
+  const items = useMemo(
+    () => (testimonials.length ? [...testimonials, ...testimonials, ...testimonials] : []),
+    [testimonials]
+  );
 
-    return () => clearInterval(interval);
-  }, [testimonials]);
-
-  useEffect(() => {
-    if (currentIndex > testimonials.length - 1) {
-      setCurrentIndex(0);
-    }
-  }, [currentIndex, testimonials.length]);
-
-  if (testimonials.length === 0) {
-    return null;
-  }
-
-  const currentTestimonial = testimonials[currentIndex];
+  if (!items.length) return null;
 
   return (
-    <section className="py-12 px-4 bg-white">
-      <div className="max-w-4xl mx-auto">
+    <section className="py-14 md:py-20 bg-[#F5F4F2]">
+      <style>{`
+        @keyframes tm { from { transform: translateX(0) } to { transform: translateX(-33.3333%) } }
+        .tm-track { animation: tm ${SPEED}s linear infinite; will-change: transform; }
+        .tm-track:hover { animation-play-state: paused; }
+      `}</style>
 
-        {/* Badge */}
-        <div className="flex justify-center mb-2">
-          <span className="flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-500 text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full">
-            <svg className="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.171c.969 0 1.371 1.24.588 1.81l-3.374 2.452a1 1 0 00-.364 1.118l1.286 3.967c.3.921-.755 1.688-1.54 1.118L10 15.347l-3.374 2.452c-.784.57-1.838-.197-1.539-1.118l1.286-3.967a1 1 0 00-.364-1.118L2.635 9.394c-.783-.57-.38-1.81.588-1.81h4.171a1 1 0 00.95-.69l1.286-3.967z" />
-            </svg>
-            Customer Review
+      <div className="max-w-[1500px] mx-auto px-4 md:px-6">
+
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-500 text-[10.5px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
+            <FaStar className="w-2.5 h-2.5" /> Customer Reviews
           </span>
+          <h2 className="text-3xl md:text-[2.5rem] font-extrabold text-gray-900 leading-tight tracking-tight">
+            What Our Clients Say{" "}
+            <span className="text-orange-500">About Us</span>
+          </h2>
+          <p className="mt-3 text-[13.5px] text-gray-400 max-w-sm mx-auto leading-relaxed">
+            Real feedback from happy customers who trust BZCart for quality & service.
+          </p>
         </div>
 
-        {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-2">
-          What Our Clients Say <br />About <span className="text-orange-500">Us</span>
-        </h2>
-
-        {/* Subtitle */}
-        <p className="text-center text-gray-500 text-sm mb-2 max-w-md mx-auto">
-          Real feedback from our happy customers who love shopping with{" "}
-          <span className="font-bold text-gray-800">BZCart.</span>{" "}
-          Your satisfaction is our top priority.
-        </p>
-
-        {/* Decorative line */}
-        <div className="flex justify-center gap-1 mb-5">
-          <span className="w-8 h-1 rounded-full bg-orange-500 inline-block" />
-          <span className="w-2 h-1 rounded-full bg-orange-300 inline-block" />
-        </div>
-
-        {/* Main Card */}
-        <div className="bg-orange-500 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
-
-          {/* Left — image with orange padding border */}
-          <div className="w-full md:w-1/2 p-3 flex">
-              <div className="relative w-full rounded-2xl overflow-hidden min-h-[420px] md:min-h-[520px]">
-              <img
-                src={currentTestimonial.image}
-                alt={currentTestimonial.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* Right — content */}
-          <div className="w-full md:w-1/2 flex flex-col justify-between p-6 md:p-7 gap-3">
-
-            {/* Location + Verified */}
-            <div className="bg-white rounded-2xl px-4 py-2.5 flex flex-col gap-0.5 shadow-sm">
-              <div className="flex items-center gap-2 text-gray-800 font-bold text-sm md:text-base">
-                <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                {currentTestimonial.city || currentTestimonial.name}
+        <div className="relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-14 md:w-20 bg-gradient-to-r from-[#F5F4F2] to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-14 md:w-20 bg-gradient-to-l from-[#F5F4F2] to-transparent z-10" />
+          <div className="flex tm-track">
+            {items.map((item, i) => (
+              <div key={`${item._id || item.image}-${i}`} className="shrink-0" style={{ width: `${100 / cardsPerView}%` }}>
+                <TestimonialCard item={item} />
               </div>
-              <div className="flex items-center gap-1 text-orange-500 text-xs font-semibold">
-                {currentTestimonial.role || "Verified Customer"}
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Rating */}
-            <div className="bg-white rounded-2xl px-4 py-2.5 flex items-center gap-3 shadow-sm">
-              <span className="text-2xl font-extrabold text-gray-800">
-                {Number(currentTestimonial.rating || 0).toFixed(1)}
-              </span>
-              <div className="w-px h-8 bg-gray-200" />
-              <div className="flex flex-col">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    i < currentTestimonial.rating
-                      ? <FaStar key={i} className="text-yellow-400 text-lg" />
-                      : <FaRegStar key={i} className="text-gray-200 text-lg" />
-                  ))}
-                </div>
-                <span className="text-gray-500 text-xs">{currentTestimonial.reviewsLabel || "Verified Review"}</span>
-              </div>
-            </div>
-
-            {/* Quote + text */}
-            <div className="relative px-2 pt-1 pb-4">
-              <span className="text-white text-5xl font-bold leading-none select-none block mb-1">❝</span>
-              <p className="text-white text-sm md:text-base leading-relaxed">
-                {currentTestimonial.text}
-              </p>
-              <span className="text-white text-5xl font-bold leading-none select-none absolute bottom-0 right-2">❞</span>
-            </div>
-
-            {/* Trusted badge */}
-            <div className="bg-white rounded-2xl px-4 py-3 flex items-center gap-3">
-              <svg className="w-5 h-5 text-orange-500 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span className="text-gray-800 text-sm font-medium">
-                Trusted by <span className="font-bold text-orange-500">5000+</span> Happy Customers
-              </span>
-            </div>
-
-            {/* Slide indicators */}
-            <div className="flex gap-2 mt-1">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? "bg-white w-6" : "bg-white/40 w-2 hover:bg-white/60"
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Trust badges */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-          {trustBadges.map((badge) => (
-            <div key={badge.title} className="flex items-center gap-3 border border-gray-100 rounded-2xl px-4 py-4 shadow-sm bg-white">
-              <div
-                className={`flex-shrink-0 w-11 h-11 rounded-2xl bg-gradient-to-br ${badge.gradient} ${badge.shadow} shadow-lg flex items-center justify-center`}
-                style={{ boxShadow: undefined }}
-              >
-                <badge.Icon className="w-6 h-6 text-white drop-shadow" />
-              </div>
-              <div>
-                <p className="text-gray-800 font-bold text-xs md:text-sm leading-tight">{badge.title}</p>
-                <p className="text-gray-400 text-xs">{badge.sub}</p>
-              </div>
-            </div>
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-10">
+          {trustBadges.map((b) => <TrustBadge key={b.title} {...b} />)}
         </div>
 
       </div>
