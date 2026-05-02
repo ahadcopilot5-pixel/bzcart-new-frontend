@@ -81,13 +81,22 @@ const WatchesHero = ({ heroProducts }) => {
 
   return (
     <section className="flex flex-col">
+      {/* Levitate Animation */}
+      <style>{`
+        @keyframes levitate {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-levitate-watch {
+          animation: levitate 3s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* Mobile Layout */}
-      <div className="lg:hidden bg-white min-h-[calc(100vh-180px)] flex flex-col">
-        {/* Hero Content */}
-        <div className="flex-1 px-5 py-6">
-          {/* Title - Left aligned */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-light italic text-gray-800">
+      <div className="lg:hidden bg-white flex flex-col">
+        <div className="flex-1 px-5 pt-6">
+          <div className="mb-4">
+            <h2 className="text-2xl font-light italic text-gray-500">
               YOUR NEXT
             </h2>
             <h1 className="text-xl font-bold text-gray-900 mt-1">
@@ -95,158 +104,101 @@ const WatchesHero = ({ heroProducts }) => {
             </h1>
           </div>
 
-          {/* Curved Line with Watch and Dots */}
-          <div className="relative h-[320px] mb-6">
-            {/* SVG Curved Line */}
-            <svg
-              className="absolute inset-0 w-full h-full"
-              viewBox="0 0 300 300"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              <path
-                d="M 20 50 Q 150 -20 280 150 Q 350 280 150 290"
-                fill="none"
-                stroke="#e5e5e5"
-                strokeWidth="1.5"
-              />
-              {/* Dots on the curve */}
-              <circle
-                cx="80"
-                cy="20"
-                r="4"
-                fill={currentIndex === 0 ? "#1f2937" : "#d1d5db"}
-                className="cursor-pointer"
-                onClick={() => handleDotClick(0)}
-              />
-              <circle
-                cx="240"
-                cy="80"
-                r="4"
-                fill={currentIndex === 1 ? "#1f2937" : "#d1d5db"}
-                className="cursor-pointer"
-                onClick={() => handleDotClick(1)}
-              />
-              <circle
-                cx="200"
-                cy="250"
-                r="4"
-                fill={currentIndex === 2 ? "#1f2937" : "#d1d5db"}
-                className="cursor-pointer"
-                onClick={() => handleDotClick(2)}
-              />
-            </svg>
-
-            {/* Watch Image - Positioned on the curve */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <img
-                src={currentWatch.image}
-                alt={currentWatch.name}
-                className={`w-48 h-48 object-contain transition-all duration-300 ${
-                  isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
-                }`}
-              />
-            </div>
+          <div className="flex justify-center mb-4">
+            <img
+              src={currentWatch.image}
+              alt={currentWatch.name}
+              className={`w-full max-w-[280px] object-contain transition-opacity duration-300 animate-levitate-watch ${
+                isAnimating ? "opacity-0" : "opacity-100"
+              }`}
+            />
           </div>
 
-          {/* Product Info Row */}
-          <div className="flex items-center justify-between mb-3">
-            <h3
-              className={`text-base font-semibold text-gray-900 transition-opacity duration-300 ${
-                isAnimating ? "opacity-0" : "opacity-100"
-              }`}
-            >
+          <div className="flex items-center justify-between mb-2">
+            <h3 className={`text-base font-semibold text-gray-900 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
               {currentWatch.name}
             </h3>
-            <p
-              className={`text-sm font-semibold text-gray-900 transition-opacity duration-300 ${
-                isAnimating ? "opacity-0" : "opacity-100"
-              }`}
-            >
+            <p className={`text-sm font-semibold text-gray-900 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
               {currentWatch.price}
             </p>
           </div>
 
-          {/* Shop Now Button */}
+          {/* Dot indicators */}
+          <div className="flex gap-2 mb-3">
+            {watches.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleDotClick(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-gray-900 w-5" : "bg-gray-300 w-2"}`}
+              />
+            ))}
+          </div>
+
           <Link
             to={`/product/${currentWatch.slug || currentWatch.id}`}
             className="inline-flex items-center gap-1 bg-gray-900 text-white text-sm px-5 py-2.5 rounded-sm"
           >
             Shop Now
+            <IoChevronForward size={14} />
           </Link>
         </div>
 
-        {/* Features Bar - Mobile */}
-        <div className="border-t border-gray-200 py-4 px-4">
+        <div className="border-t border-gray-200 py-4 px-4 mt-3">
           <div className="flex items-center justify-between">
             {features.map((feature) => (
               <div key={feature.text} className="flex items-center gap-1.5">
                 <feature.icon size={16} className="text-gray-600" />
-                <span className="text-[10px] text-gray-600">
-                  {feature.text}
-                </span>
+                <span className="text-[10px] text-gray-600">{feature.text}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Desktop Layout - Like Home HeroSection */}
+      {/* Desktop Layout */}
       <div className="hidden lg:flex flex-col bg-white min-h-[calc(100vh-72px)]">
         <div className="flex-1 max-w-7xl mx-auto px-12 py-12 flex items-center w-full">
           <div className="flex flex-row items-center justify-between gap-8 w-full">
-            {/* Left Content */}
             <div className="flex-1 space-y-6">
               <div>
-                <h2 className="text-4xl xl:text-5xl font-light italic text-gray-800">
+                <h2 className="text-4xl xl:text-5xl font-light italic text-gray-500">
                   YOUR NEXT
                 </h2>
                 <h1 className="text-4xl xl:text-5xl font-bold text-gray-900 mt-1">
                   ICONIC LOOK STARTS HERE
                 </h1>
               </div>
-
               <div className="pt-16">
-                <h3
-                  className={`text-2xl font-semibold text-gray-900 mb-4 transition-opacity duration-300 ${
-                    isAnimating ? "opacity-0" : "opacity-100"
-                  }`}
-                >
+                <h3 className={`text-2xl font-semibold text-gray-900 mb-2 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
                   {currentWatch.name}
                 </h3>
+                <p className={`text-xl font-medium text-gray-700 mb-4 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
+                  {currentWatch.price}
+                </p>
                 <Link
                   to={`/product/${currentWatch.slug || currentWatch.id}`}
-                  className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-sm text-sm font-medium transition-colors"
                 >
                   Shop Now
                   <IoChevronForward size={16} />
                 </Link>
               </div>
-
-              {/* Dot Indicators - Desktop */}
               <div className="flex gap-3 pt-8">
                 {watches.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => handleDotClick(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      index === currentIndex
-                        ? "bg-orange-500 w-8"
-                        : "bg-gray-300 hover:bg-gray-400"
-                    }`}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-gray-900 w-8" : "bg-gray-300 hover:bg-gray-400"}`}
                   />
                 ))}
               </div>
             </div>
-
-            {/* Right Content - Product Image */}
             <div className="flex-1 flex flex-col items-center">
               <img
                 src={currentWatch.image}
                 alt={currentWatch.name}
-                className={`w-full max-w-lg object-contain transition-all duration-500 ${
-                  isAnimating
-                    ? "opacity-0 scale-90 rotate-12"
-                    : "opacity-100 scale-100 rotate-0"
+                className={`w-full max-w-lg object-contain transition-all duration-500 animate-levitate-watch ${
+                  isAnimating ? "opacity-0 scale-90" : "opacity-100 scale-100"
                 }`}
               />
               <p

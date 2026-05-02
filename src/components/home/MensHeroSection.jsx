@@ -47,13 +47,22 @@ const MensHeroSection = () => {
 
   return (
     <section className="flex flex-col">
-      {/* Mobile Layout - Original Design */}
+      {/* Levitate Animation */}
+      <style>{`
+        @keyframes levitate {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-levitate-mens {
+          animation: levitate 3s ease-in-out infinite;
+        }
+      `}</style>
+
+      {/* Mobile Layout */}
       <div className="lg:hidden bg-white flex flex-col">
-        {/* Hero Content */}
         <div className="px-5 py-6">
-          {/* Title - Left aligned */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-light italic text-gray-800">
+          <div className="mb-4">
+            <h2 className="text-2xl font-light italic text-gray-500">
               YOUR NEXT
             </h2>
             <h1 className="text-xl font-bold text-gray-900 mt-1">
@@ -61,44 +70,34 @@ const MensHeroSection = () => {
             </h1>
           </div>
 
-          {/* Product Image */}
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-4">
             <img
               src="/jacket.png"
               alt="Outdoor Jacket"
-              className="w-full max-w-[280px] object-contain"
+              className="w-full max-w-[280px] object-contain animate-levitate-mens"
             />
           </div>
 
-          {/* Product Info Row */}
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-base font-semibold text-gray-900">
-              Outdoor Jacket
-            </h3>
-            <p className="text-sm font-semibold text-gray-900">
-              Rs.6,999.00 PKR
-            </p>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-base font-semibold text-gray-900">Outdoor Jacket</h3>
+            <p className="text-sm font-semibold text-gray-900">Rs.6,999.00 PKR</p>
           </div>
 
-          {/* Shop Now Button */}
           <Link
             to="/mens-clothing"
-            className="inline-flex items-center gap-1 text-gray-700 text-sm border-b border-gray-400 pb-0.5"
+            className="inline-flex items-center gap-1 bg-gray-900 text-white text-sm px-5 py-2.5 rounded-sm"
           >
             Shop Now
             <IoChevronForward size={14} />
           </Link>
         </div>
 
-        {/* Features Bar - Mobile */}
         <div className="border-t border-gray-200 py-4 px-4">
           <div className="flex items-center justify-between">
             {features.map((feature) => (
               <div key={feature.text} className="flex items-center gap-1.5">
                 <feature.icon size={16} className="text-gray-600" />
-                <span className="text-[10px] text-gray-600">
-                  {feature.text}
-                </span>
+                <span className="text-[10px] text-gray-600">{feature.text}</span>
               </div>
             ))}
           </div>
@@ -152,7 +151,7 @@ const MensHeroSection = () => {
 
               {/* Main Heading */}
               <div className="mb-6">
-                <h2 className="text-4xl lg:text-5xl xl:text-6xl font-light text-gray-800 leading-tight">
+                <h2 className="text-4xl lg:text-5xl xl:text-6xl font-light italic text-gray-500 leading-tight">
                   YOUR NEXT
                 </h2>
                 <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">

@@ -91,13 +91,22 @@ const ShoesHero = ({ heroProducts }) => {
 
   return (
     <section className="flex flex-col">
+      {/* Levitate Animation */}
+      <style>{`
+        @keyframes levitate {
+          0%, 100% { transform: translateY(0) rotate(-15deg); }
+          50% { transform: translateY(-15px) rotate(-15deg); }
+        }
+        .animate-levitate-shoe {
+          animation: levitate 3s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* Mobile Layout */}
-      <div className="lg:hidden bg-white min-h-[calc(100vh-180px)] flex flex-col">
-        {/* Hero Content */}
-        <div className="flex-1 px-5 py-6">
-          {/* Title - Left aligned */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-light italic text-gray-800">
+      <div className="lg:hidden bg-white flex flex-col">
+        <div className="flex-1 px-5 pt-6">
+          <div className="mb-4">
+            <h2 className="text-2xl font-light italic text-gray-500">
               YOUR NEXT
             </h2>
             <h1 className="text-xl font-bold text-gray-900 mt-1">
@@ -105,55 +114,36 @@ const ShoesHero = ({ heroProducts }) => {
             </h1>
           </div>
 
-          {/* Shoe Image with Color Options */}
-          <div className="relative mb-6">
-            {/* Shoe Image */}
-            <div className="flex justify-center items-center h-[280px]">
-              <img
-                src={currentShoe.image}
-                alt={currentShoe.name}
-                className={`w-72 h-auto object-contain transition-all duration-300 -rotate-[15deg] ${
-                  isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
-                }`}
-              />
-            </div>
-
-            {/* Color Options - Right side */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-              {currentShoe.colors.map((color, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedColor(index)}
-                  className={`w-5 h-5 rounded-full border-2 transition-all ${
-                    selectedColor === index
-                      ? "border-gray-900 scale-110"
-                      : "border-gray-300"
-                  }`}
-                  style={{ backgroundColor: color }}
-                />
-              ))}
-            </div>
+          <div className="flex justify-center mb-4">
+            <img
+              src={currentShoe.image}
+              alt={currentShoe.name}
+              className={`w-full max-w-[280px] object-contain transition-opacity duration-300 animate-levitate-shoe ${
+                isAnimating ? "opacity-0" : "opacity-100"
+              }`}
+            />
           </div>
 
-          {/* Product Info Row */}
-          <div className="flex items-center justify-between mb-3">
-            <h3
-              className={`text-base font-semibold text-gray-900 transition-opacity duration-300 ${
-                isAnimating ? "opacity-0" : "opacity-100"
-              }`}
-            >
+          <div className="flex items-center justify-between mb-2">
+            <h3 className={`text-base font-semibold text-gray-900 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
               {currentShoe.name}
             </h3>
-            <p
-              className={`text-sm font-semibold text-gray-900 transition-opacity duration-300 ${
-                isAnimating ? "opacity-0" : "opacity-100"
-              }`}
-            >
+            <p className={`text-sm font-semibold text-gray-900 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
               {currentShoe.price}
             </p>
           </div>
 
-          {/* Shop Now Button */}
+          {/* Dot indicators */}
+          <div className="flex gap-2 mb-3">
+            {shoes.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleDotClick(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-gray-900 w-5" : "bg-gray-300 w-2"}`}
+              />
+            ))}
+          </div>
+
           <Link
             to={`/product/${currentShoe.slug || currentShoe.id}`}
             className="inline-flex items-center gap-1 bg-gray-900 text-white text-sm px-5 py-2.5 rounded-sm"
@@ -163,15 +153,12 @@ const ShoesHero = ({ heroProducts }) => {
           </Link>
         </div>
 
-        {/* Features Bar - Mobile */}
-        <div className="border-t border-gray-200 py-4 px-4">
+        <div className="border-t border-gray-200 py-4 px-4 mt-3">
           <div className="flex items-center justify-between">
             {features.map((feature) => (
               <div key={feature.text} className="flex items-center gap-1.5">
                 <feature.icon size={16} className="text-gray-600" />
-                <span className="text-[10px] text-gray-600">
-                  {feature.text}
-                </span>
+                <span className="text-[10px] text-gray-600">{feature.text}</span>
               </div>
             ))}
           </div>
@@ -182,79 +169,46 @@ const ShoesHero = ({ heroProducts }) => {
       <div className="hidden lg:flex flex-col bg-white min-h-[calc(100vh-72px)]">
         <div className="flex-1 max-w-7xl mx-auto px-12 py-12 flex items-center w-full">
           <div className="flex flex-row items-center justify-between gap-8 w-full">
-            {/* Left Content */}
             <div className="flex-1 space-y-6">
               <div>
-                <h2 className="text-4xl xl:text-5xl font-light italic text-gray-800">
+                <h2 className="text-4xl xl:text-5xl font-light italic text-gray-500">
                   YOUR NEXT
                 </h2>
                 <h1 className="text-4xl xl:text-5xl font-bold text-gray-900 mt-1">
                   PERFECT PAIR STARTS HERE
                 </h1>
               </div>
-
               <div className="pt-16">
-                <h3
-                  className={`text-2xl font-semibold text-gray-900 mb-4 transition-opacity duration-300 ${
-                    isAnimating ? "opacity-0" : "opacity-100"
-                  }`}
-                >
+                <h3 className={`text-2xl font-semibold text-gray-900 mb-2 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
                   {currentShoe.name}
                 </h3>
-                <p
-                  className={`text-xl font-medium text-gray-700 mb-4 transition-opacity duration-300 ${
-                    isAnimating ? "opacity-0" : "opacity-100"
-                  }`}
-                >
+                <p className={`text-xl font-medium text-gray-700 mb-4 transition-opacity duration-300 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
                   {currentShoe.price}
                 </p>
                 <Link
                   to={`/product/${currentShoe.slug || currentShoe.id}`}
-                  className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-full text-sm font-medium transition-colors"
+                  className="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-sm text-sm font-medium transition-colors"
                 >
                   Shop Now
                   <IoChevronForward size={16} />
                 </Link>
               </div>
-
-              {/* Color Options - Desktop */}
-              <div className="flex gap-3 pt-4">
-                {currentShoe.colors.map((color, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedColor(index)}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${
-                      selectedColor === index
-                        ? "border-gray-900 scale-110"
-                        : "border-gray-300 hover:border-gray-400"
-                    }`}
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
-
-              {/* Dot Indicators - Desktop */}
-              <div className="flex gap-3 pt-4">
+              <div className="flex gap-3 pt-8">
                 {shoes.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => handleDotClick(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      index === currentIndex
-                        ? "bg-orange-500 w-8"
-                        : "bg-gray-300 hover:bg-gray-400"
-                    }`}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-gray-900 w-8" : "bg-gray-300 hover:bg-gray-400"}`}
                   />
                 ))}
               </div>
             </div>
 
-            {/* Right Content - Product Image */}
             <div className="flex-1 flex flex-col items-center relative">
               <img
                 src={currentShoe.image}
                 alt={currentShoe.name}
-                className={`w-full max-w-xl object-contain transition-all duration-500 -rotate-[15deg] ${
+                className={`w-full max-w-xl object-contain transition-all duration-500 animate-levitate-shoe ${
                   isAnimating ? "opacity-0 scale-90" : "opacity-100 scale-100"
                 }`}
               />
