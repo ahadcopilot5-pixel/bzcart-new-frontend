@@ -265,12 +265,12 @@ const HeroSection = () => {
 
       {/* Features Bar */}
       <div className="border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 py-4 md:py-5">
-          <div className="flex items-center justify-center gap-8 md:gap-16">
+        <div className="max-w-7xl mx-auto px-3 md:px-8 lg:px-12 py-4 md:py-5">
+          <div className="flex items-center justify-between md:justify-center gap-2 md:gap-16">
             {features.map((feature) => (
-              <div key={feature.text} className="flex items-center gap-2">
-                <feature.icon className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
-                <span className="text-xs md:text-sm text-gray-600 font-medium">
+              <div key={feature.text} className="flex items-center gap-1.5 flex-1 min-w-0 md:flex-none md:gap-2">
+                <feature.icon className="w-4 h-4 md:w-6 md:h-6 text-gray-600 flex-shrink-0" />
+                <span className="text-[11px] leading-none md:text-sm text-gray-600 font-medium whitespace-nowrap">
                   {feature.text}
                 </span>
               </div>
