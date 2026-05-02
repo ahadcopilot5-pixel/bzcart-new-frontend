@@ -19,6 +19,7 @@ import {
   ShoesPage,
   ShoesViewAllPage,
   PodsPage,
+  PodsViewAllPage,
   CarePage,
   TrackingPage,
 } from "../pages";
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
           { path: "shoes/all", element: <ShoesViewAllPage /> },
           { path: "mens-clothing", element: <MensClothingPage /> },
           { path: "pods", element: <PodsPage /> },
+          { path: "pods/all", element: <PodsViewAllPage /> },
           { path: "care", element: <CarePage /> },
         ],
       },

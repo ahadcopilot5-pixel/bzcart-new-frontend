@@ -8,5 +8,6 @@ export { default as WatchesViewAllPage } from "./WatchesViewAllPage";
 export { default as ShoesPage } from "./ShoesPage";
 export { default as ShoesViewAllPage } from "./ShoesViewAllPage";
 export { default as PodsPage } from "./PodsPage";
+export { default as PodsViewAllPage } from "./PodsViewAllPage";
 export { default as CarePage } from "./CarePage";
 export { default as TrackingPage } from "./TrackingPage";
